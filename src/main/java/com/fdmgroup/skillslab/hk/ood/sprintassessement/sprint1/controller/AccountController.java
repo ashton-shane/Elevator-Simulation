@@ -4,8 +4,8 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint1.model.*;
 import java.util.ArrayList;
 
 public class AccountController {
-    ArrayList<Customer> customers;
-    ArrayList<Account> accounts;
+    private ArrayList<Customer> customers;
+    private ArrayList<Account> accounts;
 
     public Customer createCustomer(String name, String address, String type) {
         switch(type) {
@@ -19,11 +19,12 @@ public class AccountController {
                 return company;
         }
     }
+
     public void removeCustomer(Customer customer){
         customers.remove(customer);
     }
 
-    public Account createAccount(double balance, String type) {
+    public Account createAccount(Customer customer, String type) {
         switch(type) {
             case "checking":
                 CheckingAccount checkingAccount = new CheckingAccount(balance);

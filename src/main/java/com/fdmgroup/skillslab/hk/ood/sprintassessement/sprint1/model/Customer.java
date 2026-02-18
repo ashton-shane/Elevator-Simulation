@@ -6,7 +6,7 @@ public abstract class Customer {
     private long nextCustomerId;
     private String name;
     private String address;
-    static private ArrayList<Account> accounts;
+    static protected ArrayList<Account> accounts;
 
     // constructor
     public Customer(String name, String address) {
