@@ -4,8 +4,8 @@ public class SavingsAccount extends Account {
     private double interestRate;
 
     // constructor
-    public SavingsAccount(double balance) {
-        super(balance);
+    public SavingsAccount() {
+        super();
     }
 
     // methods

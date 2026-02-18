@@ -27,21 +27,20 @@ public class AccountController {
     public Account createAccount(Customer customer, String type) {
         switch(type) {
             case "checking":
-                CheckingAccount checkingAccount = new CheckingAccount(balance);
+                CheckingAccount checkingAccount = new CheckingAccount();
                 accounts.add(checkingAccount);
-                Customer.addAccount(checkingAccount);
+                customer.addAccount(checkingAccount);
                 return checkingAccount;
             case "savings":
-                SavingsAccount savingsAccount = new SavingsAccount(balance);
+                SavingsAccount savingsAccount = new SavingsAccount();
                 accounts.add(savingsAccount);
-                Customer.addAccount(savingsAccount);
+                customer.addAccount(savingsAccount);
                 return savingsAccount;
         }
     }
 
     public void removeAccount(Account account){
         accounts.remove(account);
-        Customer.removeAccount(account);
     }
 
 

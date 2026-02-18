@@ -6,9 +6,9 @@ public abstract class Account {
     private long nextAccountId;
 
     // constructor
-    public Account(double balance){
-        this.balance = balance;
+    public Account() {
         this.nextAccountId = ACCOUNT_ID;
+        this.balance = 0;
         ACCOUNT_ID += 5;
     }
 

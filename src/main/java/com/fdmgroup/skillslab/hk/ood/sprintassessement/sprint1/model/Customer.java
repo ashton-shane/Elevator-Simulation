@@ -17,11 +17,11 @@ public abstract class Customer {
     }
 
     // methods
-    public static void addAccount(Account account) {
+    public void addAccount(Account account) {
         accounts.add(account);
     }
 
-    public static void removeAccount(Account account) {
+    public void removeAccount(Account account) {
         accounts.remove(account);
     }
 

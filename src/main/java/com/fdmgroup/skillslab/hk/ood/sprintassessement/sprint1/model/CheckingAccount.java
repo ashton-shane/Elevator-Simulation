@@ -4,8 +4,8 @@ public class CheckingAccount extends Account {
     private int nextCheckNumber = 1;
 
     // constructor
-    public CheckingAccount(double balance) {
-        super(balance);
+    public CheckingAccount() {
+        super();
     }
 
     // getter and setter
