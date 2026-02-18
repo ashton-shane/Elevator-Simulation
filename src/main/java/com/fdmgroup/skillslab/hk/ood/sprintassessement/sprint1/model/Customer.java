@@ -6,7 +6,7 @@ public abstract class Customer {
     private long nextCustomerId;
     private String name;
     private String address;
-    private ArrayList<Account> accounts;
+    static private ArrayList<Account> accounts;
 
     // constructor
     public Customer(String name, String address) {
@@ -17,13 +17,17 @@ public abstract class Customer {
     }
 
     // methods
-    public void addAccount(Account account) {
+    public static void addAccount(Account account) {
         accounts.add(account);
     }
 
-    public void removeAccount(Account account) {
+    public static void removeAccount(Account account) {
         accounts.remove(account);
     }
+
+    public void chargeAllAccounts(double amount) {
+
+    };
 
     // getters and setters
     public long getCUSTOMER_ID() {
