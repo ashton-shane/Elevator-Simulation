@@ -17,6 +17,8 @@ public class AccountController {
                 Company company = new Company(name, address);
                 customers.add(company);
                 return company;
+            default:
+                throw new IllegalArgumentException("Customer type does not exist.");
         }
     }
 
@@ -37,11 +39,17 @@ public class AccountController {
                 accounts.add(savingsAccount);
                 customer.addAccount(savingsAccount);
                 return savingsAccount;
+            default:
+                throw new IllegalArgumentException("Account type does not exist.");
         }
     }
 
     public void removeAccount(Account account){
         accounts.remove(account);
+
+        for (Customer customer : customers ) {
+                accounts.removeIf(acc -> acc == account);
+        }
 
     }
 
