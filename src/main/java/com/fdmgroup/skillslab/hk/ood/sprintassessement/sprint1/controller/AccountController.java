@@ -22,6 +22,7 @@ public class AccountController {
 
     public void removeCustomer(Customer customer){
         customers.remove(customer);
+        customer.getAccounts().clear();
     }
 
     public Account createAccount(Customer customer, String type) {
@@ -41,6 +42,7 @@ public class AccountController {
 
     public void removeAccount(Account account){
         accounts.remove(account);
+
     }
 
 

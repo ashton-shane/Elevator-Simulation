@@ -25,9 +25,7 @@ public abstract class Customer {
         accounts.remove(account);
     }
 
-    public void chargeAllAccounts(double amount) {
-
-    };
+    public abstract void chargeAllAccounts(double amount);
 
     // getters and setters
     public long getCUSTOMER_ID() {
