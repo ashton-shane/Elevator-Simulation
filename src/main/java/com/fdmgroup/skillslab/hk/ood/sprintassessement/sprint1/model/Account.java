@@ -1,15 +1,15 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint1.model;
 
 public abstract class Account {
-    private long ACCOUNT_ID = 1_000;
+    private final long ACCOUNT_ID;
     protected double balance;
-    private long nextAccountId;
+    private long nextAccountId = 1_000;
 
     // constructor
     public Account() {
-        this.nextAccountId = ACCOUNT_ID;
+        this.ACCOUNT_ID = nextAccountId;
         this.balance = 0;
-        ACCOUNT_ID += 5;
+        nextAccountId += 5;
     }
 
     // methods

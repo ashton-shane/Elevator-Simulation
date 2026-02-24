@@ -2,8 +2,8 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint1.model;
 import java.util.ArrayList;
 
 public abstract class Customer {
-    private long CUSTOMER_ID = 2_000_000;
-    private long nextCustomerId;
+    private final long CUSTOMER_ID;
+    private long nextCustomerId = 2_000_000;
     private String name;
     private String address;
     static protected ArrayList<Account> accounts;
@@ -12,8 +12,8 @@ public abstract class Customer {
     public Customer(String name, String address) {
         this.name = name;
         this.address = address;
-        this.nextCustomerId = CUSTOMER_ID;
-        CUSTOMER_ID += 7;
+        this.CUSTOMER_ID = nextCustomerId;
+        nextCustomerId += 7;
     }
 
     // methods
