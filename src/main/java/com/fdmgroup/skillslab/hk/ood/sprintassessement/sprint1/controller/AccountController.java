@@ -4,8 +4,8 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint1.model.*;
 import java.util.ArrayList;
 
 public class AccountController {
-    private ArrayList<Customer> customers;
-    private ArrayList<Account> accounts;
+    private ArrayList<Customer> customers = new ArrayList<>();
+    private ArrayList<Account> accounts = new ArrayList<>();
 
     public Customer createCustomer(String name, String address, String type) {
         switch(type) {
@@ -23,8 +23,17 @@ public class AccountController {
     }
 
     public void removeCustomer(Customer customer){
-        customers.remove(customer);
-        customer.getAccounts().clear();
+        customers.remove(customer);                                     // remove customer from customers arraylist
+        ArrayList<Account> custAccounts = customer.getAccounts();
+        custAccounts.clear();                                           // remove all accounts from associated w customer instance
+
+        for (Account custAcc : custAccounts) {                          // remove all accounts in accounts arrayList
+            for (Account acc : accounts) {
+                if (custAcc == acc) {
+                    accounts.remove(custAcc);
+                }
+            }
+        }
     }
 
     public Account createAccount(Customer customer, String type) {
