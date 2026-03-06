@@ -1,5 +1,5 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2;
 
 public interface FeeCalculationService {
-    public void calculateFee();
+    public double calculateFee(double accBalance);
 }
