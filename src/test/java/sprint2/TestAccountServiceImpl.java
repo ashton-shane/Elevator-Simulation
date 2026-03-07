@@ -14,7 +14,7 @@ public class TestAccountServiceImpl {
 
     @BeforeEach
     public void test_configurations(){
-        inMemoryDAO = new InMemoryDAO();
+        inMemoryDAO = spy(new InMemoryDAO());
         accountService = new AccountServiceImpl(inMemoryDAO);
     }
 
@@ -36,4 +36,24 @@ public class TestAccountServiceImpl {
         accountService.createAccount(account);
         assertEquals(1, accountService.getAccounts().size());
     }
+
+    @Test
+    public void verifyCallsDeleteAccountOnce_whenDeleteAccount(){
+        Account account = mock(Account.class);
+        accountService.removeAccount(account);
+        verify(inMemoryDAO).deleteAccount(account);
+    }
+
+    @Test
+    public void returnsListOfAccountsOfSize1_whenOneAccountRemoved(){
+        Account account1 = mock(Account.class);
+        Account account2 = mock(Account.class);
+        accountService.createAccount(account1);
+        accountService.createAccount(account2);
+        accountService.removeAccount(account2);
+        assertEquals(1, accountService.getAccounts().size());
+    }
+
+
+
 }
