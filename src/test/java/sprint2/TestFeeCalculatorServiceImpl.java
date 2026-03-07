@@ -1,9 +1,7 @@
 package sprint2;
 
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2.FeeCalculatorServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
