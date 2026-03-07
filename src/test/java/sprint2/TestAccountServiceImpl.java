@@ -5,7 +5,8 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2.AccountServiceImp
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2.InMemoryDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class TestAccountServiceImpl {
@@ -45,7 +46,17 @@ public class TestAccountServiceImpl {
     }
 
     @Test
-    public void returnsListOfAccountsOfSize1_whenOneAccountRemoved(){
+    public void returnsFalse_whenFindingAccount1AfterTwoAccountsAddedAndOneAccountRemoved(){
+        Account account1 = mock(Account.class);
+        Account account2 = mock(Account.class);
+        accountService.createAccount(account1);
+        accountService.createAccount(account2);
+        accountService.removeAccount(account2);
+        assertFalse(inMemoryDAO.findAccount(account2));
+    }
+
+    @Test
+    public void returnsListOfAccountsOfSize1_whenTwoAccountsAddedAndOneAccountRemoved(){
         Account account1 = mock(Account.class);
         Account account2 = mock(Account.class);
         accountService.createAccount(account1);

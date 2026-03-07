@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IAccountReaderDAO {
     public List<Account> readAccounts();
+    public boolean findAccount(Account account);
 }

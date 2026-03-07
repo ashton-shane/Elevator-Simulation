@@ -24,7 +24,7 @@ public class AccountServiceImpl implements IAccountService {
 
     @Override
     public void removeAccount(Account account) {
-
+        inMemoryDAO.deleteAccount(account);
     }
 
 
