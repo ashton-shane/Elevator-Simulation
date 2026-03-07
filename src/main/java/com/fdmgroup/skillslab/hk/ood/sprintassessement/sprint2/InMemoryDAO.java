@@ -7,15 +7,25 @@ import java.util.List;
 
 public class InMemoryDAO implements IAccountWriterDAO, IAccountReaderDAO {
     // This will be the database stub for the Reader/Writer interfaces.
-    private ArrayList<Account> mock_accounts = new ArrayList<>();
+    private ArrayList<Account> mockAccounts = new ArrayList<>();
 
     @Override
     public List<Account> readAccounts() {
-        return List.of();
+        return mockAccounts;
     }
 
     @Override
-    public void createAccount() {
+    public void createAccount(Account account) {
+        mockAccounts.add(account);
+    }
+
+    @Override
+    public void removeAccount(Account account) {
+
+    }
+
+    @Override
+    public void updateAccount(Account account) {
 
     }
 

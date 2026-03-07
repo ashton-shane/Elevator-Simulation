@@ -14,12 +14,12 @@ public class AccountServiceImpl implements IAccountService {
 
     @Override
     public List<Account> getAccounts() {
-        return List.of();
+        return inMemoryDAO.readAccounts();
     }
 
     @Override
     public void createAccount(Account account) {
-
+        inMemoryDAO.createAccount(account);
     }
 
     @Override
