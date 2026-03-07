@@ -15,32 +15,22 @@ public class InMemoryDAO implements IAccountWriterDAO, IAccountReaderDAO {
 
     @Override
     public List<Account> readAccounts() {
-        return mockAccounts;
+        return this.mockAccounts;
     }
 
     @Override
     public boolean findAccount(Account account) {
-        for (Account acc : this.mockAccounts) {
-            if (acc == account) {
-                return true;
-            }
-        }
-        return false;
+        return this.mockAccounts.contains(account);
     }
+
     @Override
     public void createAccount(Account account) {
-        mockAccounts.add(account);
+        this.mockAccounts.add(account);
     }
 
     @Override
     public void deleteAccount(Account account) {
         this.mockAccounts.remove(account);
     }
-
-    @Override
-    public void updateAccount(Account account) {
-
-    }
-
 
 }
