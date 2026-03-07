@@ -14,7 +14,7 @@ public class TestAccountServiceImpl {
 
     @BeforeEach
     public void test_configurations(){
-        inMemoryDAO = mock(InMemoryDAO.class);
+        inMemoryDAO = new InMemoryDAO();
         accountService = new AccountServiceImpl(inMemoryDAO);
     }
 
