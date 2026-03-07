@@ -24,10 +24,16 @@ public class TestAccountServiceImpl {
     }
 
     @Test
-    public void returnsListOfAccountsOfSize1_whenAddOneAccount(){
+    public void verifyCallsCreateAccountOnce_whenCreateAccount(){
         Account account = mock(Account.class);
         accountService.createAccount(account);
         verify(inMemoryDAO).createAccount(account);
+    }
+
+    @Test
+    public void returnsListOfAccountsOfSize1_whenAddOneAccount(){
+        Account account = mock(Account.class);
+        accountService.createAccount(account);
         assertEquals(1, accountService.getAccounts().size());
     }
 }
