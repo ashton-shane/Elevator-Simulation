@@ -1,6 +1,6 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2;
 
-public class FeeCalculatorServiceImpl implements FeeCalculationService {
+public class FeeCalculatorServiceImpl implements IFeeCalculationService {
     @Override
     public double calculateFee(double accBalance) {
         if (accBalance <= 100.00) {
