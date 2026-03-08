@@ -9,9 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 public class TestSingletonSafetyDepositBoxService {
     @Test
     public void returnsNewUniqueInstance_whenGetInstanceWithoutPriorInstance(){
-        SafetyDepositBoxService uniqueInstance = SafetyDepositBoxService.getUniqueInstance();
-        assertInstanceOf(SafetyDepositBoxService.class, uniqueInstance);
+        assertInstanceOf(SafetyDepositBoxService.class, SafetyDepositBoxService.getUniqueInstance());
     }
 
-
+    @Test
+    public void returnsSameUniqueInstance_whenGetInstanceWithPriorInstance(){
+        SafetyDepositBoxService uniqueInstance = SafetyDepositBoxService.getUniqueInstance();
+        assertEquals(uniqueInstance, SafetyDepositBoxService.getUniqueInstance());
+    }
 }
