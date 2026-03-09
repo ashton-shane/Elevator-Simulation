@@ -27,7 +27,4 @@ public class SafetyDepositBoxService {
     public void setNumberOfSafetyDepositBoxes(int numberOfSafetyDepositBoxes) {
         this.totalNumberOfSafetyDepositBoxes = numberOfSafetyDepositBoxes;
     }
-
-
-
 }
