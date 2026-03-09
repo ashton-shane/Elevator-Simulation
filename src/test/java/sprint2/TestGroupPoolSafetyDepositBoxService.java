@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 public class TestGroupPoolSafetyDepositBoxService {
@@ -13,7 +14,7 @@ public class TestGroupPoolSafetyDepositBoxService {
 
     @BeforeEach
     public void setup_config(){
-        safetyDepositBoxService = SafetyDepositBoxService.getUniqueInstance();
+        safetyDepositBoxService = spy(SafetyDepositBoxService.getUniqueInstance());
     }
 
     @Test
@@ -36,5 +37,11 @@ public class TestGroupPoolSafetyDepositBoxService {
     public void returnsNull_whenRemovingSafetyDepositBoxFromList() {
         safetyDepositBoxService.setNumberOfSafetyDepositBoxes(1);
         assertEquals(1, safetyDepositBoxService.getNumberOfSafetyDepositBoxes());
+    }
+
+    @Test
+    public void verifyGetReleasedSafetyBoxCalledOnce_whenAllocateSafetyDepositBoxWithBoxAvailable(){
+        safetyDepositBoxService.allocateSafetyDepositBox();
+        verify(safetyDepositBoxService).getReleasedSafetyDepositBox();
     }
 }

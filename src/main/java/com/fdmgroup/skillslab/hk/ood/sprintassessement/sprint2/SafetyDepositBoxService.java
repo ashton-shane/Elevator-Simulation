@@ -57,8 +57,21 @@ public class SafetyDepositBoxService {
         }
     }
 
-    // Testing purposes
     public List<SafetyDepositBox> getSafetyDepositBoxes() {
         return this.safetyDepositBoxes;
+    }
+
+    public SafetyDepositBox allocateSafetyDepositBox(){
+       return this.getReleasedSafetyDepositBox();
+    }
+
+    public SafetyDepositBox getReleasedSafetyDepositBox(){
+        for (SafetyDepositBox box : this.safetyDepositBoxes) {
+            if (box.isAllotted()) {
+                box.setAllotted(true);
+                return box;
+            }
+        }
+        return null;
     }
 }
