@@ -1,11 +1,14 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class SafetyDepositBox {
     private boolean isAllotted;
     private final double id;
-
-
     private static double nextId = 1;
+    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+
 
     // constructor
     public SafetyDepositBox(){
@@ -20,11 +23,23 @@ public class SafetyDepositBox {
     }
 
     public boolean isAllotted() {
-        return this.isAllotted;
+        rwLock.readLock().lock();
+        try {
+            return this.isAllotted;
+        }
+        finally {
+            rwLock.readLock().unlock();
+        }
     }
 
     public void setAllotted(boolean allotted) {
-        this.isAllotted = allotted;
+        rwLock.writeLock().lock();
+        try {
+            this.isAllotted = allotted;
+        }
+        finally {
+            rwLock.writeLock().unlock();
+        }
     }
 
     public static double getNextId() {
