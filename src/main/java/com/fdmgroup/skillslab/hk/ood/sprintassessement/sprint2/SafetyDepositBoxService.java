@@ -11,7 +11,7 @@ public class SafetyDepositBoxService {
     private List<SafetyDepositBox> safetyDepositBoxes = new ArrayList<>();
     private int totalNumberOfSafetyDepositBoxes;
 
-    // Singleton Design Pattern that only allows one SafetyDepositBoxService instance to be created
+    // LAZY Singleton Design Pattern that only allows one SafetyDepositBoxService instance to be created
     private SafetyDepositBoxService(){
         this.totalNumberOfSafetyDepositBoxes = 2;
         for (int i = 0; i < this.totalNumberOfSafetyDepositBoxes; i++) {
