@@ -22,24 +22,12 @@ public class SafetyDepositBox {
         return this.id;
     }
 
-    public boolean isAllotted() {
-        rwLock.readLock().lock();
-        try {
-            return this.isAllotted;
-        }
-        finally {
-            rwLock.readLock().unlock();
-        }
+    public synchronized boolean isAllotted() {
+        return this.isAllotted;
     }
 
-    public void setAllotted(boolean allotted) {
-        rwLock.writeLock().lock();
-        try {
-            this.isAllotted = allotted;
-        }
-        finally {
-            rwLock.writeLock().unlock();
-        }
+    public synchronized void setAllotted(boolean allotted) {
+        this.isAllotted = allotted;
     }
 
     public static double getNextId() {
