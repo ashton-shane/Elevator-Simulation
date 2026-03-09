@@ -17,9 +17,14 @@ public class TestGroupPoolSafetyDepositBoxService {
     }
 
     @Test
-    public void returnsSafetyDepositBoxQueueOfSizeTwo_whenProgramStarts(){
+    public void returnsTwoFromGetNumberOfSafetyDepositBoxes_whenProgramStarts(){
         assertEquals(2, safetyDepositBoxService.getNumberOfSafetyDepositBoxes());
     };
+
+    @Test
+    public void returnsListofSizeTwoForSafetyDepositBoxes_whenProgramStarts(){
+        assertEquals(2, safetyDepositBoxService.getSafetyDepositBoxes().size());
+    }
 
     @Test
     public void returnsSafetyDepositBoxQueueofSizeOne_whenSetSizetoOne() {

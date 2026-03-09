@@ -5,12 +5,18 @@ import java.util.List;
 
 public class SafetyDepositBoxService {
     private static SafetyDepositBoxService uniqueInstance;
-    private List<SafetyDepositBoxService> safetyDepositBoxes = new ArrayList<>();
+
+
+    private List<SafetyDepositBox> safetyDepositBoxes = new ArrayList<>();
     private int totalNumberOfSafetyDepositBoxes;
 
     // Singleton Design Pattern that only allows one SafetyDepositBoxService instance to be created
     private SafetyDepositBoxService(){
         this.totalNumberOfSafetyDepositBoxes = 2;
+        for (int i = 0; i < this.totalNumberOfSafetyDepositBoxes; i++) {
+            SafetyDepositBox box = new SafetyDepositBox();
+            safetyDepositBoxes.add(box);
+        }
     };
 
     public static synchronized SafetyDepositBoxService getUniqueInstance() {
@@ -26,5 +32,10 @@ public class SafetyDepositBoxService {
 
     public void setNumberOfSafetyDepositBoxes(int numberOfSafetyDepositBoxes) {
         this.totalNumberOfSafetyDepositBoxes = numberOfSafetyDepositBoxes;
+    }
+
+    // Testing purposes
+    public List<SafetyDepositBox> getSafetyDepositBoxes() {
+        return this.safetyDepositBoxes;
     }
 }
