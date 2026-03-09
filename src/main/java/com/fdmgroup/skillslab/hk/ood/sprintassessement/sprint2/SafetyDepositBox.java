@@ -2,8 +2,10 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2;
 
 public class SafetyDepositBox {
     private boolean isAllotted;
-    private double id;
-    private double nextId = 0;
+    private final double id;
+
+
+    private static double nextId = 1;
 
     // constructor
     public SafetyDepositBox(){
@@ -11,13 +13,10 @@ public class SafetyDepositBox {
         this.id = nextId;
         nextId += 1;
     }
+
     // getters and setters
     public double getId() {
         return this.id;
-    }
-
-    public void setId(double id) {
-        this.id = id;
     }
 
     public boolean isAllotted() {
@@ -28,6 +27,7 @@ public class SafetyDepositBox {
         this.isAllotted = allotted;
     }
 
-
-
+    public static double getNextId() {
+        return nextId;
+    }
 }

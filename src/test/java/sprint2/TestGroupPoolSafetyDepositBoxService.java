@@ -37,8 +37,4 @@ public class TestGroupPoolSafetyDepositBoxService {
         safetyDepositBoxService.setNumberOfSafetyDepositBoxes(1);
         assertEquals(1, safetyDepositBoxService.getNumberOfSafetyDepositBoxes());
     }
-
-
-
-
 }
