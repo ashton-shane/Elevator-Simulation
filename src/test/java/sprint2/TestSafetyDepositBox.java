@@ -14,7 +14,7 @@ public class TestSafetyDepositBox {
     @BeforeEach
     public void setup_config(){
         safetyDepositBoxService = SafetyDepositBoxService.getUniqueInstance();
-        safetyDepositBoxService.setNumberOfSafetyDepositBoxes(5);
+        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(5);
     }
 
     @Test
@@ -30,7 +30,7 @@ public class TestSafetyDepositBox {
 
     @Test
     public void returnsListOfSizeThree_whenSetFivesBoxesThenRemoveTwoBoxes(){
-        safetyDepositBoxService.setNumberOfSafetyDepositBoxes(3);
+        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(3);
         assertEquals(3, safetyDepositBoxService.getSafetyDepositBoxes().size());
     }
 }

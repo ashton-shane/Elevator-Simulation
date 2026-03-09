@@ -32,18 +32,12 @@ public class SafetyDepositBoxService {
         return totalNumberOfSafetyDepositBoxes;
     }
 
-    public void setNumberOfSafetyDepositBoxes(int numberOfSafetyDepositBoxes) {
-        this.totalNumberOfSafetyDepositBoxes = numberOfSafetyDepositBoxes;
+    public void setTotalNumberOfSafetyDepositBoxes(int number) {
+        this.totalNumberOfSafetyDepositBoxes = number;
         int boxesToCreate = this.totalNumberOfSafetyDepositBoxes - this.getSafetyDepositBoxes().size();
 
-        // increase pool
-        if (boxesToCreate > 0) {
-            for (int i = 0; i < boxesToCreate; i++) {
-                SafetyDepositBox box = new SafetyDepositBox();
-                safetyDepositBoxes.add(box);
-            }
-        } // decrease pool: check allotted status first to ensure it's not in use.
-        else if (boxesToCreate < 0) {
+        // decrease pool: check allotted status first to ensure it's not in use.
+        if (boxesToCreate < 0) {
             int boxesToRemove = abs(boxesToCreate);
             int counter = 0;
             while (counter != boxesToRemove) {
@@ -62,16 +56,52 @@ public class SafetyDepositBoxService {
     }
 
     public SafetyDepositBox allocateSafetyDepositBox(){
-       return this.getReleasedSafetyDepositBox();
+        // check if any available boxes
+        boolean allAllotted = true;
+        for (SafetyDepositBox box : this.safetyDepositBoxes) {
+            if (!box.isAllotted()) {
+                allAllotted = false;
+                break;
+            }
+        }
+
+        // if no available boxes
+        if (allAllotted) {
+            int currentNumOfBoxes = this.getSafetyDepositBoxes().size();
+            if (currentNumOfBoxes < this.totalNumberOfSafetyDepositBoxes) {
+                SafetyDepositBox box = new SafetyDepositBox();
+                this.safetyDepositBoxes.add(box);
+            }
+        }
+
+        return this.getReleasedSafetyDepositBox();
     }
 
     public SafetyDepositBox getReleasedSafetyDepositBox(){
         for (SafetyDepositBox box : this.safetyDepositBoxes) {
-            if (box.isAllotted()) {
+            if (!box.isAllotted()) {
                 box.setAllotted(true);
                 return box;
             }
-        }
+        } // implement optional?
         return null;
+    }
+
+    public int getNumberOfAvailableSafetyBoxes(){
+        int availableBoxes = 0;
+        for (SafetyDepositBox box : this.safetyDepositBoxes) {
+            if (!box.isAllotted()) {
+                availableBoxes += 1;
+            }
+        }
+        return availableBoxes;
+    }
+
+    public void releaseSafetyDepositBox(SafetyDepositBox safetyDepositBox){
+        for (SafetyDepositBox box : this.safetyDepositBoxes) {
+            if (safetyDepositBox == box) {
+                box.setAllotted(false);
+            }
+        }
     }
 }
