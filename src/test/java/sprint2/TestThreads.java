@@ -13,55 +13,64 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestThreads {
     SafetyDepositBoxService safetyDepositBoxService;
+    AtomicInteger waitCount;
+    List<Thread> threads;
 
     @BeforeEach
     public void setup_config(){
         safetyDepositBoxService = SafetyDepositBoxService.getUniqueInstance();
-        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(5);
+        waitCount = new AtomicInteger(0);
+        threads = new ArrayList<>();
     }
 
     @Test
     void noThreadKeptWaiting_whenTestTwoThreadsNeitherWaits() throws InterruptedException {
-        AtomicInteger waitCount = new AtomicInteger(0);
-        List<Thread> threads = new ArrayList<>();
-
+        // create two threads
         for (int i = 0; i < 2; i++) {
             Thread t = new Thread(() -> {
-                SafetyDepositBox box = safetyDepositBoxService.getReleasedSafetyDepositBox();
+                long start = System.currentTimeMillis();
+                SafetyDepositBox box = safetyDepositBoxService.allocateSafetyDepositBox();
+                long elapsed = System.currentTimeMillis() - start;
 
-                if (box == null) {
-                    waitCount.incrementAndGet();
-                    return;
+                // if more than 5seconds, means thread is waiting since boxes will be released after 5secs
+                if (elapsed >= 5000) {
+                    waitCount.incrementAndGet(); // this thread had to wait
                 }
 
+                // release box after 5 secs
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 } finally {
-                    box.setAllotted(false);
+                    safetyDepositBoxService.releaseSafetyDepositBox(box);
                 }
             });
             threads.add(t);
         }
 
-        for (Thread t : threads) t.start();
-        for (Thread t : threads) t.join();
+        // start threads
+        for (Thread t : threads) {
+            t.start();
+        }
+
+        for (Thread t : threads) {
+            t.join();
+        }
+
         assertEquals(0, waitCount.get());
     }
 
     @Test
     void oneThreadKeptWaiting_whenTestThreeThreadsOneWaits() throws InterruptedException {
-        AtomicInteger waitCount = new AtomicInteger(0);
-        List<Thread> threads = new ArrayList<>();
-
         for (int i = 0; i < 3; i++) {
             Thread t = new Thread(() -> {
-                SafetyDepositBox box = safetyDepositBoxService.getReleasedSafetyDepositBox();
+                long start = System.currentTimeMillis();
+                SafetyDepositBox box = safetyDepositBoxService.allocateSafetyDepositBox();
+                long elapsed = System.currentTimeMillis() - start;
 
-                if (box == null) {
-                    waitCount.incrementAndGet();
-                    return;
+                if (elapsed >= 5000) {
+                    waitCount.incrementAndGet(); // this thread had to wait
                 }
 
                 try {
@@ -69,7 +78,7 @@ public class TestThreads {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 } finally {
-                    box.setAllotted(false);
+                    safetyDepositBoxService.releaseSafetyDepositBox(box);
                 }
             });
             threads.add(t);
