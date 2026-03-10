@@ -2,6 +2,7 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,6 @@ import static java.lang.Math.abs;
 
 public class SafetyDepositBoxService {
     private static SafetyDepositBoxService uniqueInstance;
-    private final ReentrantLock boxLock = new ReentrantLock();
     private static final Logger LOGGER = LogManager.getLogger(SafetyDepositBoxService.class);
 
     private List<SafetyDepositBox> safetyDepositBoxes = new ArrayList<>();
@@ -60,7 +60,7 @@ public class SafetyDepositBoxService {
         return this.safetyDepositBoxes;
     }
 
-    public synchronized SafetyDepositBox allocateSafetyDepositBox(){
+    public synchronized SafetyDepositBox allocateSafetyDepositBox() {
         // check if any available boxes
         boolean allAllotted = true;
         for (SafetyDepositBox box : this.safetyDepositBoxes) {
@@ -71,29 +71,26 @@ public class SafetyDepositBoxService {
         }
 
         // if no available boxes
-        if (allAllotted) {
-            LOGGER.info("All boxes have been allocated. Please wait.");
+        while (allAllotted) {
             int currentNumOfBoxes = this.getSafetyDepositBoxes().size();
             if (currentNumOfBoxes < this.totalNumberOfSafetyDepositBoxes) {
                 SafetyDepositBox box = new SafetyDepositBox();
                 this.safetyDepositBoxes.add(box);
+                LOGGER.info("A new box has been created. Box is now available");
+                notifyAll();
             }
             else {
-                if (boxLock.tryLock(5, TimeUnit.SECONDS)) {
-                    try {
-                        getReleasedSafetyDepositBox();
-                        LOGGER.info("Box has been released and is now available");
-                    }
-                    finally {
-                        boxLock.unlock();
-                    }
+                try {
+                    LOGGER.info("All boxes have been allocated. Please wait.");
+                    wait();
                 }
-                else {
-                    LOGGER.info("TIMEOUT: No Available box now");
+                catch (InterruptedException e) {
+                    LOGGER.info("Thread was interrupted while waiting for a box.");
+                    Thread.currentThread().interrupt();
+                    return null;
                 }
             }
         }
-
         return this.getReleasedSafetyDepositBox();
     }
 
@@ -103,7 +100,7 @@ public class SafetyDepositBoxService {
                 box.setAllotted(true);
                 return box;
             }
-        } // implement optional?
+        }
         return null;
     }
 
@@ -121,6 +118,8 @@ public class SafetyDepositBoxService {
         for (SafetyDepositBox box : this.safetyDepositBoxes) {
             if (safetyDepositBox == box) {
                 box.setAllotted(false);
+                notifyAll();
+                LOGGER.info("Box has been released");
             }
         }
     }

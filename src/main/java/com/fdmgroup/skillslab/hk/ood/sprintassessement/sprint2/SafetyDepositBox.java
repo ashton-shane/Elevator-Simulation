@@ -1,14 +1,13 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2;
 
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SafetyDepositBox {
     private boolean isAllotted;
     private final double id;
     private static double nextId = 1;
-    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
-
 
     // constructor
     public SafetyDepositBox(){
