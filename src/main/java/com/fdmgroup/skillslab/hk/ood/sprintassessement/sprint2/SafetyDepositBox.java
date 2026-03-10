@@ -6,8 +6,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SafetyDepositBox {
     private boolean isAllotted;
-    private final double id;
-    private static double nextId = 1;
+    private final int id;
+    private static int nextId = 1;
 
     // constructor
     public SafetyDepositBox(){
@@ -17,7 +17,7 @@ public class SafetyDepositBox {
     }
 
     // getters and setters
-    public double getId() {
+    public int getId() {
         return this.id;
     }
 
@@ -29,7 +29,12 @@ public class SafetyDepositBox {
         this.isAllotted = allotted;
     }
 
-    public static double getNextId() {
+    public static int getNextId() {
         return nextId;
+    }
+
+    // solely for testing purposes
+    public static void setNextId(int n) {
+        nextId = n;
     }
 }

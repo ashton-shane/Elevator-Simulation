@@ -13,9 +13,11 @@ import static org.mockito.Mockito.*;
 public class TestGroupPoolSafetyDepositBoxService {
     SafetyDepositBoxService safetyDepositBoxService;
 
+
     @BeforeEach
     public void setup_config(){
         safetyDepositBoxService = spy(SafetyDepositBoxService.getUniqueInstance());
+        resetForTests();
     }
 
     @Test
@@ -88,5 +90,13 @@ public class TestGroupPoolSafetyDepositBoxService {
         safetyDepositBoxService.getSafetyDepositBoxes().add(safetyDepositBox);
         safetyDepositBoxService.releaseSafetyDepositBox(safetyDepositBox);
         assertEquals(1, safetyDepositBoxService.getNumberOfAvailableSafetyBoxes());
+    }
+
+    public void resetForTests() {
+        safetyDepositBoxService.getSafetyDepositBoxes().clear();
+        for (int i = 0; i < 2; i++){
+            SafetyDepositBox box = new SafetyDepositBox();
+            safetyDepositBoxService.getSafetyDepositBoxes().add(box);
+        }
     }
 }

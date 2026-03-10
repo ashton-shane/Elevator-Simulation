@@ -61,21 +61,12 @@ public class SafetyDepositBoxService {
     }
 
     public synchronized SafetyDepositBox allocateSafetyDepositBox() {
-        // check if any available boxes
-        boolean allAllotted = true;
-        for (SafetyDepositBox box : this.safetyDepositBoxes) {
-            if (!box.isAllotted()) {
-                allAllotted = false;
-                break;
-            }
-        }
-
         // if no available boxes
         while (areAllBoxesAllotted()) {
             int currentNumOfBoxes = this.getSafetyDepositBoxes().size();
             if (currentNumOfBoxes < this.totalNumberOfSafetyDepositBoxes) {
                 SafetyDepositBox box = new SafetyDepositBox();
-                this.safetyDepositBoxes.add(box);
+                this.getSafetyDepositBoxes().add(box);
                 LOGGER.info("A new box has been created. Box is now available");
                 notifyAll();
             }
