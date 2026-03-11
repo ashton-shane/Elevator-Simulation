@@ -1,7 +1,9 @@
 package sprint2;
 
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint1.model.Account;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2.AccountReaderDAO;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2.AccountServiceImpl;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2.AccountWriterDAO;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2.InMemoryDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +14,15 @@ import static org.mockito.Mockito.*;
 public class TestAccountServiceImpl {
     AccountServiceImpl accountService;
     InMemoryDAO inMemoryDAO;
+    AccountReaderDAO accountReaderDAO;
+    AccountWriterDAO accountWriterDAO;
 
     @BeforeEach
     public void test_configurations(){
         inMemoryDAO = spy(new InMemoryDAO());
-        accountService = new AccountServiceImpl(inMemoryDAO);
+        accountReaderDAO = inMemoryDAO;
+        accountWriterDAO = inMemoryDAO;
+        accountService = new AccountServiceImpl(inMemoryDAO, accountReaderDAO, accountWriterDAO);
     }
 
     @Test
@@ -28,7 +34,7 @@ public class TestAccountServiceImpl {
     public void verifyCallsCreateAccountOnce_whenCreateAccount(){
         Account account = mock(Account.class);
         accountService.createAccount(account);
-        verify(inMemoryDAO).createAccount(account);
+        verify(accountWriterDAO).createAccount(account);
     }
 
     @Test
@@ -42,7 +48,7 @@ public class TestAccountServiceImpl {
     public void verifyCallsDeleteAccountOnce_whenDeleteAccount(){
         Account account = mock(Account.class);
         accountService.removeAccount(account);
-        verify(inMemoryDAO).deleteAccount(account);
+        verify(accountWriterDAO).deleteAccount(account);
     }
 
     @Test
@@ -52,7 +58,7 @@ public class TestAccountServiceImpl {
         accountService.createAccount(account1);
         accountService.createAccount(account2);
         accountService.removeAccount(account2);
-        assertFalse(inMemoryDAO.findAccount(account2));
+        assertFalse(accountReaderDAO.findAccount(account2));
     }
 
     @Test

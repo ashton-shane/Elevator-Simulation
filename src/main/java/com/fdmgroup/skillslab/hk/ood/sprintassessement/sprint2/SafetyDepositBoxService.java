@@ -39,18 +39,15 @@ public class SafetyDepositBoxService {
 
     public synchronized void setTotalNumberOfSafetyDepositBoxes(int number) {
         this.totalNumberOfSafetyDepositBoxes = number;
-        int boxesToCreate = this.totalNumberOfSafetyDepositBoxes - this.getSafetyDepositBoxes().size();
+        int boxesToDestroy = this.getSafetyDepositBoxes().size() - number;
 
         // decrease pool: check allotted status first to ensure it's not in use.
-        if (boxesToCreate < 0) {
-            int boxesToRemove = abs(boxesToCreate);
-            int counter = 0;
-            while (counter != boxesToRemove) {
-                for (SafetyDepositBox box : this.safetyDepositBoxes) {
-                    if (!box.isAllotted()) {
-                        safetyDepositBoxes.remove(box);
-                        counter += 1;
-                    }
+        int counter = 0;
+        while (counter != boxesToDestroy) {
+            for (SafetyDepositBox box : this.safetyDepositBoxes) {
+                if (!box.isAllotted()) {
+                    safetyDepositBoxes.remove(box);
+                    counter += 1;
                 }
             }
         }
@@ -92,6 +89,7 @@ public class SafetyDepositBoxService {
             }
         }
         return true;
+        // atomicInteger
     }
 
     public synchronized SafetyDepositBox getReleasedSafetyDepositBox(){

@@ -40,10 +40,9 @@ public class TestThreads {
                 // release box after 5 secs
                 try {
                     Thread.sleep(5000);
+                    safetyDepositBoxService.releaseSafetyDepositBox(box);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                } finally {
-                    safetyDepositBoxService.releaseSafetyDepositBox(box);
                 }
             });
             threads.add(t);
@@ -75,10 +74,9 @@ public class TestThreads {
 
                 try {
                     Thread.sleep(5000);
+                    safetyDepositBoxService.releaseSafetyDepositBox(box);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                } finally {
-                    safetyDepositBoxService.releaseSafetyDepositBox(box);
                 }
             });
             threads.add(t);

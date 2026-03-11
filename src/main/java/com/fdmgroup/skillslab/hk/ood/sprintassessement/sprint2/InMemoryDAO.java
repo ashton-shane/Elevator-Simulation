@@ -5,7 +5,7 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint1.model.Account;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InMemoryDAO implements IAccountWriterDAO, IAccountReaderDAO {
+public class InMemoryDAO implements AccountWriterDAO, AccountReaderDAO {
     // This will be the database stub for the Reader/Writer interfaces.
     private ArrayList<Account> mockAccounts;
 
