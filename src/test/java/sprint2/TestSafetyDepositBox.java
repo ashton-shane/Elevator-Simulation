@@ -5,7 +5,6 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2.SafetyDepositBoxS
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +16,7 @@ public class TestSafetyDepositBox {
     @BeforeEach
     public void setup_config(){
         safetyDepositBoxService = SafetyDepositBoxService.getUniqueInstance();
-        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(3);
+        safetyDepositBoxService.setMaxNumberOfSafetyDepositBoxes(3);
     }
 
     @Test

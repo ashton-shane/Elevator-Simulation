@@ -2,24 +2,23 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint2;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import static java.lang.Math.abs;
+
 
 public class SafetyDepositBoxService {
     private static SafetyDepositBoxService uniqueInstance;
     private static final Logger LOGGER = LogManager.getLogger(SafetyDepositBoxService.class);
 
     private List<SafetyDepositBox> safetyDepositBoxes = new ArrayList<>();
-    private int totalNumberOfSafetyDepositBoxes;
+    private int maxNumberOfSafetyDepositBoxes;
+    private AtomicInteger allottedCount = new AtomicInteger(0);
 
-    // LAZY Singleton Design Pattern that only allows one SafetyDepositBoxService instance to be created
+    // ===============  LAZY Singleton =============== //
     private SafetyDepositBoxService(){
-        this.totalNumberOfSafetyDepositBoxes = 2;
-        for (int i = 0; i < this.totalNumberOfSafetyDepositBoxes; i++) {
+        this.maxNumberOfSafetyDepositBoxes = 2;
+        for (int i = 0; i < this.maxNumberOfSafetyDepositBoxes; i++) {
             SafetyDepositBox box = new SafetyDepositBox();
             safetyDepositBoxes.add(box);
         }
@@ -32,36 +31,49 @@ public class SafetyDepositBoxService {
         return uniqueInstance;
     }
 
-    // getters and setters
-    public synchronized int getNumberOfSafetyDepositBoxes() {
-        return totalNumberOfSafetyDepositBoxes;
+
+    // =============== GETTERS AND SETTERS =============== //
+    public synchronized List<SafetyDepositBox> getSafetyDepositBoxes() {
+        return this.safetyDepositBoxes;
     }
 
-    public synchronized void setTotalNumberOfSafetyDepositBoxes(int number) {
-        this.totalNumberOfSafetyDepositBoxes = number;
-        int boxesToDestroy = this.getSafetyDepositBoxes().size() - number;
+    public synchronized int getMaxNumberOfSafetyDepositBoxes() {
+        return this.maxNumberOfSafetyDepositBoxes;
+    }
 
-        // decrease pool: check allotted status first to ensure it's not in use.
-        int counter = 0;
-        while (counter != boxesToDestroy) {
-            for (SafetyDepositBox box : this.safetyDepositBoxes) {
-                if (!box.isAllotted()) {
-                    safetyDepositBoxes.remove(box);
-                    counter += 1;
+    public int getAllottedCount() {
+        return this.allottedCount.get();
+    }
+
+    public synchronized int getCurrTotalBoxesCreated(){
+        return this.getSafetyDepositBoxes().size();
+    }
+
+    public synchronized void setMaxNumberOfSafetyDepositBoxes(int number) {
+        // set the size regardless
+        this.maxNumberOfSafetyDepositBoxes = number;
+
+        // decrease pool if set number is lower than current size
+        if (number < this.getSafetyDepositBoxes().size()){
+            int boxesToDestroy = this.getCurrTotalBoxesCreated() - number;
+            AtomicInteger counter = new AtomicInteger(0);
+            while (counter.get() != boxesToDestroy) {
+                for (SafetyDepositBox box : this.getSafetyDepositBoxes()) {
+                    if (!box.isAllotted()) {
+                        this.getSafetyDepositBoxes().remove(box);
+                        counter.getAndIncrement();
+                    }
                 }
             }
         }
     }
 
-    public synchronized List<SafetyDepositBox> getSafetyDepositBoxes() {
-        return this.safetyDepositBoxes;
-    }
 
+    // =============== BOX MOVEMENT LOGIC =============== //
     public synchronized SafetyDepositBox allocateSafetyDepositBox() {
-        // if no available boxes
         while (areAllBoxesAllotted()) {
             int currentNumOfBoxes = this.getSafetyDepositBoxes().size();
-            if (currentNumOfBoxes < this.totalNumberOfSafetyDepositBoxes) {
+            if (currentNumOfBoxes < this.maxNumberOfSafetyDepositBoxes) {
                 SafetyDepositBox box = new SafetyDepositBox();
                 this.getSafetyDepositBoxes().add(box);
                 LOGGER.info("A new box has been created. Box is now available");
@@ -82,20 +94,15 @@ public class SafetyDepositBoxService {
         return this.getReleasedSafetyDepositBox();
     }
 
-    private boolean areAllBoxesAllotted() {
-        for (SafetyDepositBox box : this.safetyDepositBoxes) {
-            if (!box.isAllotted()) {
-                return false;
-            }
-        }
-        return true;
-        // atomicInteger
+    private synchronized boolean areAllBoxesAllotted() {
+        return this.getAllottedCount() == this.getCurrTotalBoxesCreated();
     }
 
     public synchronized SafetyDepositBox getReleasedSafetyDepositBox(){
-        for (SafetyDepositBox box : this.safetyDepositBoxes) {
+        for (SafetyDepositBox box : this.getSafetyDepositBoxes()) {
             if (!box.isAllotted()) {
                 box.setAllotted(true);
+                allottedCount.incrementAndGet();
                 notifyAll();
                 return box;
             }
@@ -104,22 +111,22 @@ public class SafetyDepositBoxService {
     }
 
     public synchronized int getNumberOfAvailableSafetyBoxes(){
-        int availableBoxes = 0;
-        for (SafetyDepositBox box : this.safetyDepositBoxes) {
-            if (!box.isAllotted()) {
-                availableBoxes += 1;
-            }
-        }
-        return availableBoxes;
+        return this.getCurrTotalBoxesCreated() - this.getAllottedCount();
     }
 
     public synchronized void releaseSafetyDepositBox(SafetyDepositBox safetyDepositBox){
-        for (SafetyDepositBox box : this.safetyDepositBoxes) {
+        for (SafetyDepositBox box : this.getSafetyDepositBoxes()) {
             if (safetyDepositBox == box) {
                 box.setAllotted(false);
+                allottedCount.getAndDecrement();
                 notifyAll();
                 LOGGER.info("Box has been released");
             }
         }
+    }
+
+    // Only for testing purposes
+    public static void resetInstance() {
+        uniqueInstance = null;
     }
 }

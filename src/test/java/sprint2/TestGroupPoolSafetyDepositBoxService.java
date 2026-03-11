@@ -13,33 +13,36 @@ import static org.mockito.Mockito.*;
 public class TestGroupPoolSafetyDepositBoxService {
     SafetyDepositBoxService safetyDepositBoxService;
 
-
     @BeforeEach
     public void setup_config(){
+        SafetyDepositBoxService.resetInstance();
         safetyDepositBoxService = spy(SafetyDepositBoxService.getUniqueInstance());
-        resetForTests();
     }
 
     @Test
     public void returnsTwoFromGetNumberOfSafetyDepositBoxes_whenProgramStarts(){
-        assertEquals(2, safetyDepositBoxService.getNumberOfSafetyDepositBoxes());
+        int numOfBoxes = safetyDepositBoxService.getMaxNumberOfSafetyDepositBoxes();
+        assertEquals(2, numOfBoxes);
     };
 
     @Test
     public void returnsListofSizeTwoForSafetyDepositBoxes_whenProgramStarts(){
-        assertEquals(2, safetyDepositBoxService.getSafetyDepositBoxes().size());
+        int numOfBoxes = safetyDepositBoxService.getCurrTotalBoxesCreated();
+        assertEquals(2, numOfBoxes);
     }
 
     @Test
     public void returnsSafetyDepositBoxQueueofSizeOne_whenSetSizetoOne() {
-        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(1);
-        assertEquals(1, safetyDepositBoxService.getNumberOfSafetyDepositBoxes());
+        safetyDepositBoxService.setMaxNumberOfSafetyDepositBoxes(1);
+        int numOfBoxes = safetyDepositBoxService.getMaxNumberOfSafetyDepositBoxes();
+        assertEquals(1, numOfBoxes);
     }
 
     @Test
-    public void returnsNull_whenRemovingSafetyDepositBoxFromList() {
-        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(1);
-        assertEquals(1, safetyDepositBoxService.getNumberOfSafetyDepositBoxes());
+    public void returnsOne_whenRemovingSafetyDepositBoxFromList() {
+        safetyDepositBoxService.setMaxNumberOfSafetyDepositBoxes(1);
+        int numOfBoxes = safetyDepositBoxService.getMaxNumberOfSafetyDepositBoxes();
+        assertEquals(1, numOfBoxes);
     }
 
     @Test
@@ -55,48 +58,28 @@ public class TestGroupPoolSafetyDepositBoxService {
 
     @Test
     public void returnsListOfSizeThree_whenAllocateSafetyDepositBoxWithCurrentBoxesLessThanTotalAndAllTaken(){
-        for (SafetyDepositBox box : safetyDepositBoxService.getSafetyDepositBoxes()) {
-            box.setAllotted(true);
-        }
-        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(5);
         safetyDepositBoxService.allocateSafetyDepositBox();
-        assertEquals(3, safetyDepositBoxService.getSafetyDepositBoxes().size());
+        safetyDepositBoxService.allocateSafetyDepositBox();
+        safetyDepositBoxService.setMaxNumberOfSafetyDepositBoxes(3);
+        safetyDepositBoxService.allocateSafetyDepositBox();
+        assertEquals(3, safetyDepositBoxService.getCurrTotalBoxesCreated());
     }
 
     @Test
     public void returnsTwo_whenGetNumberOfAvailableSafetyBoxes(){
-        assertEquals(2, safetyDepositBoxService.getNumberOfAvailableSafetyBoxes());
+        int numOfBoxes = safetyDepositBoxService.getNumberOfAvailableSafetyBoxes();
+        assertEquals(2, numOfBoxes);
     }
 
     @Test
     public void returnsZero_whenGetNumberOfAvailableSafetyBoxesOneAfterAllottedOneAdded(){
-        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(3);
-        for (SafetyDepositBox box : safetyDepositBoxService.getSafetyDepositBoxes()) {
-            box.setAllotted(true);
-        }
-        safetyDepositBoxService.allocateSafetyDepositBox(); // note this creates a box and releases it
-        assertEquals(0, safetyDepositBoxService.getNumberOfAvailableSafetyBoxes());
-    }
-
-    @Test
-    public void returnsOne_whenReleaseSafetyDepositBox(){
-        safetyDepositBoxService.setTotalNumberOfSafetyDepositBoxes(3);
-        for (SafetyDepositBox box : safetyDepositBoxService.getSafetyDepositBoxes()) {
-            box.setAllotted(true);
-        }
-
-        SafetyDepositBox safetyDepositBox = mock(SafetyDepositBox.class);
-        safetyDepositBox.setAllotted(true);
-        safetyDepositBoxService.getSafetyDepositBoxes().add(safetyDepositBox);
-        safetyDepositBoxService.releaseSafetyDepositBox(safetyDepositBox);
-        assertEquals(1, safetyDepositBoxService.getNumberOfAvailableSafetyBoxes());
-    }
-
-    public void resetForTests() {
-        safetyDepositBoxService.getSafetyDepositBoxes().clear();
-        for (int i = 0; i < 2; i++){
-            SafetyDepositBox box = new SafetyDepositBox();
-            safetyDepositBoxService.getSafetyDepositBoxes().add(box);
-        }
+        safetyDepositBoxService.setMaxNumberOfSafetyDepositBoxes(3);
+        safetyDepositBoxService.allocateSafetyDepositBox();
+        safetyDepositBoxService.allocateSafetyDepositBox();
+        // increase by one
+        // this immediately creates, releases, and allots it - also tests the release function
+        safetyDepositBoxService.allocateSafetyDepositBox();
+        int numOfBoxes = safetyDepositBoxService.getNumberOfAvailableSafetyBoxes();
+        assertEquals(0, numOfBoxes);
     }
 }

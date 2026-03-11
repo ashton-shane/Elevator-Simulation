@@ -17,4 +17,10 @@ public class TestSingletonSafetyDepositBoxService {
         SafetyDepositBoxService uniqueInstance = SafetyDepositBoxService.getUniqueInstance();
         assertEquals(uniqueInstance, SafetyDepositBoxService.getUniqueInstance());
     }
+
+    @Test
+    public void returnsTwoFromAllottedCount_whenProgramStarts(){
+        SafetyDepositBoxService uniqueInstance = SafetyDepositBoxService.getUniqueInstance();
+        assertEquals(2, uniqueInstance.getAllottedCount());
+    }
 }

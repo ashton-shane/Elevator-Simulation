@@ -71,7 +71,6 @@ public class TestThreads {
                 if (elapsed >= 5000) {
                     waitCount.incrementAndGet(); // this thread had to wait
                 }
-
                 try {
                     Thread.sleep(5000);
                     safetyDepositBoxService.releaseSafetyDepositBox(box);
@@ -86,7 +85,6 @@ public class TestThreads {
         for (Thread t : threads) {
             t.start();
         }
-
         for (Thread t : threads) {
             t.join();
         }
