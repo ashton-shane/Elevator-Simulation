@@ -1,18 +1,22 @@
-package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.services;
+package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Elevator;
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.models.Request;
 
 public class ElevatorService {
     private List<Request> requests = new ArrayList<>();
     private List<Elevator> elevators = new ArrayList<>();
 
     // methods
-    public void allocateRequest() {
-        // To change return type to Request
+    public void allocateRequest(Elevator elevator) {
+        int elevatorCurrentFloor = elevator.getCurrentFloor();
+        int nearestFloor;
+        for (Request request : requests) {
+            if (request.getCurrentFloor() == elevatorCurrentFloor) {
+                elevator.loadDestinationFloor(request.getDestinationFloor());
+                elevator.goToFloor(request);
+            }
+        }
     }
 
     public void removeRequest(Request request) {

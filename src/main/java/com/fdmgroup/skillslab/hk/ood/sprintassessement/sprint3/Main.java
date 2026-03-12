@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.services.ConfigLoader;
-
 public class Main {
 
     static void main(String[] args) {
