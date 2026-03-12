@@ -14,26 +14,40 @@ public class ConfigLoader {
     private List<Request> requests = new ArrayList<>();
 
     public void loadConfigFile(String filePath) {
-        try (
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        ) {
-            var lines = new ArrayList<String>();
-            String line;
-            while((line = reader.readLine()) != null) {
-                lines.add(line);
+        // clear any previous configuration so loader can be reused
+        this.config = null;
+        this.requests.clear();
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
+        if (inputStream == null) {
+            throw new IllegalArgumentException("configuration file not found: " + filePath);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            // read and sanitise lines: trim whitespace and ignore blank lines
+            var lines = reader.lines()
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .toList();
+
+            if (lines.size() < 2) {
+                throw new IllegalArgumentException("configuration file must contain at least two numbers");
             }
 
             this.config = new Configuration(
-                    Integer.valueOf(lines.get(0).trim()),
-                    Integer.valueOf(lines.get(1).trim()));
+                    Integer.parseInt(lines.get(0)),
+                    Integer.parseInt(lines.get(1)));
+
             for (int i = 2; i < lines.size(); i++) {
-                var fields = lines.get(i).split(" ");
+                var fields = lines.get(i).split("\\s+");
+                if (fields.length < 3) {
+                    continue; // skip malformed request line
+                }
                 requests.add(
                     new Request(
-                        fields[0].trim().equals("G") ? 0 : Integer.valueOf(fields[0].trim()),
-                        fields[1].trim().equals("G") ? 0 : Integer.valueOf(fields[1].trim()),
-                        Integer.valueOf(fields[2].trim())
+                        "G".equals(fields[0]) ? 0 : Integer.parseInt(fields[0]),
+                        "G".equals(fields[1]) ? 0 : Integer.parseInt(fields[1]),
+                        Integer.parseInt(fields[2])
                     )
                 );
             }
