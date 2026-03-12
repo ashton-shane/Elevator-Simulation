@@ -8,8 +8,15 @@ public class ElevatorService {
     private List<Elevator> elevators = new ArrayList<>();
 
     // methods
-    public void allocateRequest() {
-        // To change return type to Request
+    public void allocateRequest(Elevator elevator) {
+        int elevatorCurrentFloor = elevator.getCurrentFloor();
+        int nearestFloor;
+        for (Request request : requests) {
+            if (request.getCurrentFloor() == elevatorCurrentFloor) {
+                elevator.loadDestinationFloor(request.getDestinationFloor());
+                elevator.goToFloor(request.getCurrentFloor());
+            }
+        }
     }
 
     public void removeRequest(Request request) {
