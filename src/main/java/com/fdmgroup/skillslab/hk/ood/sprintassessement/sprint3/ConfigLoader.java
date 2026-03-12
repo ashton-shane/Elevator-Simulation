@@ -6,11 +6,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class ConfigLoader {
     private Configuration config;
-    private List<Request> requests;
+    private List<Request> requests = new ArrayList<>();
 
     public void loadConfigFile(String filePath) {
         try (
@@ -26,7 +27,6 @@ public class ConfigLoader {
             this.config = new Configuration(
                     Integer.valueOf(lines.get(0).trim()),
                     Integer.valueOf(lines.get(1).trim()));
-            var requests = new ArrayList<Request>();
             for (int i = 2; i < lines.size(); i++) {
                 var fields = lines.get(i).split(" ");
                 requests.add(
@@ -37,14 +37,16 @@ public class ConfigLoader {
                     )
                 );
             }
-            this.requests = requests;
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public Configuration getConfig() {
-        return config;
+    public Optional<Configuration> getConfig() {
+        if (this.config == null) {
+            return Optional.empty();
+        }
+        return Optional.of(this.config);
     }
 
     public List<Request> getRequests() {
