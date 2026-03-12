@@ -14,7 +14,7 @@ public class ElevatorService {
         for (Request request : requests) {
             if (request.getCurrentFloor() == elevatorCurrentFloor) {
                 elevator.loadDestinationFloor(request.getDestinationFloor());
-                elevator.goToFloor(request.getCurrentFloor());
+                elevator.goToFloor(request);
             }
         }
     }

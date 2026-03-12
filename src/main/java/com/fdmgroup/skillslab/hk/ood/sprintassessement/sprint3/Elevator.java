@@ -7,14 +7,14 @@ import java.util.List;
 public class Elevator {
     private int currentFloor;
     private List<Integer> destinationFloors = new ArrayList<>();
-    private int numOfPassengers;
+    private int numOfPassengers = 0;
     private ElevatorService elevatorService;
 
     public Elevator(ElevatorService elevatorService) {
         this.elevatorService = elevatorService;
     }
 
-    // methods
+    // floor methods
     public void requestFloor(){
         if (this.numOfPassengers == 0) {
             elevatorService.allocateRequest(this);
@@ -26,8 +26,18 @@ public class Elevator {
         // sort
     }
 
-    public void goToFloor(int floor){
-        this.setCurrentFloor(floor);
+    public void goToFloor(Request request){
+        this.setCurrentFloor(request.getCurrentFloor());
+        // load or unload logic :(
+    }
+
+    // passenger loading methods
+    public void loadPassengers(int n){
+        this.numOfPassengers += n;
+    }
+
+    public void unloadPassengers(int n){
+        this.numOfPassengers -= n;
     }
 
 
