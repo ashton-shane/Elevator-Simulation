@@ -1,7 +1,10 @@
-package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
+package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.services;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Elevator;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.models.Request;
 
 public class ElevatorService {
     private List<Request> requests = new ArrayList<>();
