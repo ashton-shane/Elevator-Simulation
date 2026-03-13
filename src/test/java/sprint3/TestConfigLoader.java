@@ -1,8 +1,9 @@
 package sprint3;
 
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.ConfigLoader;
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Configuration;
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Request;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.models.Configuration;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.models.Request;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.services.ConfigLoader;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,22 +41,19 @@ public class TestConfigLoader {
         assertEquals(3, requests.size(), "three requests should be parsed");
 
         Request r0 = requests.get(0);
-        assertEquals(0, r0.getCurrentFloor());
-        assertEquals(3, r0.getDestinationFloor());
-        assertEquals(1, r0.getNumOfPassengers());
-        assertTrue(r0.isGoingUp());
+        assertEquals(0, r0.currentFloor());
+        assertEquals(3, r0.destinationFloor());
+        assertEquals(1, r0.numOfPassengers());
 
         Request r1 = requests.get(1);
-        assertEquals(1, r1.getCurrentFloor());
-        assertEquals(0, r1.getDestinationFloor());
-        assertEquals(2, r1.getNumOfPassengers());
-        assertFalse(r1.isGoingUp());
+        assertEquals(1, r1.currentFloor());
+        assertEquals(0, r1.destinationFloor());
+        assertEquals(2, r1.numOfPassengers());
 
         Request r2 = requests.get(2);
-        assertEquals(2, r2.getCurrentFloor());
-        assertEquals(4, r2.getDestinationFloor());
-        assertEquals(5, r2.getNumOfPassengers());
-        assertTrue(r2.isGoingUp());
+        assertEquals(2, r2.currentFloor());
+        assertEquals(4, r2.destinationFloor());
+        assertEquals(5, r2.numOfPassengers());
     }
 
     @Test
