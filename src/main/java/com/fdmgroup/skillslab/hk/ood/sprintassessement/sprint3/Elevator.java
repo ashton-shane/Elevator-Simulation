@@ -2,6 +2,7 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
 
 import javax.print.attribute.standard.Destination;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Elevator {
@@ -10,6 +11,7 @@ public class Elevator {
     private int numOfPassengers;
     private boolean isGoingUp;
     private List<Passenger> passengers = new ArrayList<>();
+    private List<Request> currentRequests = new ArrayList<>();
     private ElevatorService elevatorService;
 
     public Elevator(ElevatorService elevatorService) {
@@ -32,16 +34,36 @@ public class Elevator {
 
     public void goToFloor(Request request){
         this.setCurrentFloor(request.getCurrentFloor());
-        // load or unload logic :(
     }
 
     // passenger loading methods
-    public void loadPassengers(int n){
-        this.numOfPassengers += n;
+    public void loadPassengers(Request r){
+        // Add pax count
+        this.numOfPassengers += r.getNumOfPassengers();
+
+        // Get pax off the floor list and onto the elevator list
+        List<Passenger> floorPassengers = FloorMap.getBuildingFloorMap().get(r.getCurrentFloor());
+        Iterator<Passenger> iterator = floorPassengers.iterator();
+        while (iterator.hasNext()) {
+            Passenger passenger = iterator.next();
+            if (passenger.isGoingUp() == this.isGoingUp()) {
+                this.getPassengers().add(passenger);
+                iterator.remove();
+            }
+        }
     }
 
-    public void unloadPassengers(int n){
-        this.numOfPassengers -= n;
+    public void unloadPassengers(Request request){
+        // subtract pax count
+        this.numOfPassengers -= request.getNumOfPassengers();
+
+        // unload pax
+        this.getPassengers().removeIf(passenger ->
+                passenger.getDestinationFloor() == this.getCurrentFloor()
+        );
+
+        // remove from elevator requests
+        this.getCurrentRequests().remove(request);
     }
 
 
@@ -68,6 +90,10 @@ public class Elevator {
 
     public List<Passenger> getPassengers() {
         return passengers;
+    }
+
+    public List<Request> getCurrentRequests() {
+        return currentRequests;
     }
 
 }
