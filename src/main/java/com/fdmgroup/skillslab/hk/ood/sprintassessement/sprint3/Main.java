@@ -9,8 +9,9 @@ import java.util.List;
 public class Main {
 
     static void main(String[] args) {
+        ElevatorService elevatorService = new ElevatorService();
         var loader = new ConfigLoader();
-        loader.loadConfigFile("ElevatorConfig.txt");
+        loader.loadConfigFile("ElevatorConfig.txt", elevatorService);
         // loader usage:
         // loader.getConfig(); -> returns Configuration object
         // loader.getRequests(); -> returns List<Request>

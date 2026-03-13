@@ -11,12 +11,11 @@ import java.util.Optional;
 
 public class ConfigLoader {
     private Configuration config;
-    private List<Request> requests = new ArrayList<>();
 
-    public void loadConfigFile(String filePath) {
+    public void loadConfigFile(String filePath, ElevatorService elevatorService) {
         // clear any previous configuration so loader can be reused
         this.config = null;
-        this.requests.clear();
+        elevatorService.getRequests().clear();
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
         if (inputStream == null) {
@@ -34,6 +33,7 @@ public class ConfigLoader {
                 throw new IllegalArgumentException("configuration file must contain at least two numbers");
             }
 
+            // create record
             this.config = new Configuration(
                     Integer.parseInt(lines.get(0)),
                     Integer.parseInt(lines.get(1)));
@@ -43,7 +43,7 @@ public class ConfigLoader {
                 if (fields.length < 3) {
                     continue; // skip malformed request line
                 }
-                requests.add(
+                elevatorService.getRequests().add(
                     new Request(
                         "G".equals(fields[0]) ? 0 : Integer.parseInt(fields[0]),
                         "G".equals(fields[1]) ? 0 : Integer.parseInt(fields[1]),
@@ -61,9 +61,5 @@ public class ConfigLoader {
             return Optional.empty();
         }
         return Optional.of(this.config);
-    }
-
-    public List<Request> getRequests() {
-        return requests;
     }
 }

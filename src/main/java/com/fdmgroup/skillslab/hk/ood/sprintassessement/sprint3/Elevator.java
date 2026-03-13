@@ -7,11 +7,15 @@ import java.util.List;
 public class Elevator {
     private int currentFloor;
     private List<Integer> destinationFloors = new ArrayList<>();
-    private int numOfPassengers = 0;
+    private int numOfPassengers;
+    private boolean isGoingUp;
+    private List<Passenger> passengers = new ArrayList<>();
     private ElevatorService elevatorService;
 
     public Elevator(ElevatorService elevatorService) {
         this.elevatorService = elevatorService;
+        this.numOfPassengers = 0;
+        this.isGoingUp = true;
     }
 
     // floor methods
@@ -56,6 +60,14 @@ public class Elevator {
 
     public void setCurrentFloor(int floor) {
         this.currentFloor = floor;
+    }
+
+    public boolean isGoingUp() {
+        return isGoingUp;
+    }
+
+    public List<Passenger> getPassengers() {
+        return passengers;
     }
 
 }
