@@ -5,11 +5,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FloorMap {
     // map format: { floor : List<Passenger> }
-    Map<Integer, List<Passenger>> buildingFloorMap = new ConcurrentHashMap<>();
+    Map<Integer, List<Passenger>> buildingFloorMap;
     public static final FloorMap instance = new FloorMap();
 
     private FloorMap(){
+        buildingFloorMap = new ConcurrentHashMap<>();
+    }
 
+    public static FloorMap getInstance(){
+        return instance;
+    }
+
+    public void loadFloorMapWithPassengers(){
         for (Request r : ElevatorService.getRequests()) {
             List<Passenger> waitingPassengers = buildingFloorMap.computeIfAbsent(
                     r.getCurrentFloor(), floor -> new ArrayList<>()
@@ -22,9 +29,5 @@ public class FloorMap {
                 waitingPassengers.add(passenger);
             }
         }
-    }
-
-    public static FloorMap getInstance(){
-        return instance;
     }
 }
