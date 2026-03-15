@@ -1,6 +1,7 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
 
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.RequestManager;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.Request;
 
 import java.io.BufferedReader;
@@ -16,7 +17,7 @@ public class ConfigLoader {
     public void loadConfigFile(String filePath, ElevatorService elevatorService) {
         // clear any previous configuration so loader can be reused
         this.config = null;
-        elevatorService.getRequests().clear();
+        RequestManager.getInstance().getRequestsPool().clear();
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
         if (inputStream == null) {
@@ -44,7 +45,7 @@ public class ConfigLoader {
                 if (fields.length < 3) {
                     continue; // skip malformed request line
                 }
-                elevatorService.getRequests().add(
+                RequestManager.getInstance().getRequestsPool().add(
                     new Request(
                         "G".equals(fields[0]) ? 0 : Integer.parseInt(fields[0]),
                         "G".equals(fields[1]) ? 0 : Integer.parseInt(fields[1]),
