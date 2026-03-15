@@ -1,6 +1,7 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
 
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.RequestManager;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +19,7 @@ public class PassengerFloorMap {
     }
 
     public void loadFloorMapWithPassengers(){
-        for (Request r : ElevatorService.getRequests()) {
+        for (Request r : RequestManager.getRequests()) {
             List<Passenger> waitingPassengers = buildingFloorMap.computeIfAbsent(
                     r.getCurrentFloor(), floor -> new ArrayList<>()
             );

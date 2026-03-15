@@ -9,10 +9,8 @@ import java.util.List;
 public class ElevatorService {
     private List<Elevator> elevators = new ArrayList<>();
 
-
-
     // lift movement
-    public void moveElevator(Elevator elevator, Request request){
+    public void moveElevator(Elevator elevator, Request request) throws InterruptedException {
         elevator.goToFloor(request);
     }
 

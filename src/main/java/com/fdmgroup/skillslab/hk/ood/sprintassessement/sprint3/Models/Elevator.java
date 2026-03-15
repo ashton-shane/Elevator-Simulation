@@ -3,13 +3,11 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.RequestManager;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Elevator {
     private int currentFloor;
-    private List<Integer> destinationFloors = new ArrayList<>();
+    private Queue<Integer> destinationFloors = new ArrayDeque<>();
     private int numOfPassengers;
     private boolean isGoingUp;
     private List<Passenger> passengers = new ArrayList<>();
@@ -32,13 +30,14 @@ public class Elevator {
         // sort
     }
 
-    public void goToFloor(Request request){
-        Thread.sleep(3000);
-        this.setCurrentFloor(request.getCurrentFloor());
+    public void goToFloor(Request request) throws InterruptedException {
+            Thread.sleep(3000);
+            this.setCurrentFloor(request.getCurrentFloor());
     }
 
     // passenger loading methods
-    public void loadPassengers(Request r){
+    public void loadPassengers(Request r) throws InterruptedException {
+        Thread.sleep(5000);
         // Add pax count
         this.numOfPassengers += r.getNumOfPassengers();
 
@@ -54,7 +53,8 @@ public class Elevator {
         }
     }
 
-    public void unloadPassengers(Request request){
+    public void unloadPassengers(Request request) throws InterruptedException {
+        Thread.sleep(5000);
         // subtract pax count
         this.numOfPassengers -= request.getNumOfPassengers();
 
