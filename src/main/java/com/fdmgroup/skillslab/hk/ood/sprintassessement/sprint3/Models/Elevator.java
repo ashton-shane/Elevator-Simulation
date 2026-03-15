@@ -28,10 +28,6 @@ public class Elevator {
         destinationFloors.add(destinationFloor); // PQ will automatically sort new floors
     }
 
-    public void goToFloor(Request request) {
-            this.setCurrentFloor(request.getCurrentFloor());
-    }
-
     // ======= PASSENGER LOADING METHODS ======= //
     public void loadPassengers(Request r) throws InterruptedException {
         Thread.sleep(5000);
@@ -78,8 +74,8 @@ public class Elevator {
         return currentFloor;
     }
 
-    public void setCurrentFloor(int floor) {
-        this.currentFloor = floor;
+    public void setCurrentFloor(Request request) {
+        this.currentFloor = request.getDestinationFloor();
     }
 
     public boolean isGoingUp() {
