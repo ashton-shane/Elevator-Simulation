@@ -9,6 +9,7 @@ public class PassengerFloorMap {
     private Map<Integer, List<Passenger>> passengerFloorMap;             // map format: { floor : List<Passenger> }
     public static final PassengerFloorMap instance = new PassengerFloorMap();
 
+    // singleton
     private PassengerFloorMap(){
         this.passengerFloorMap = new ConcurrentHashMap<>();
     }
@@ -17,10 +18,7 @@ public class PassengerFloorMap {
         return instance;
     }
 
-    public Map<Integer, List<Passenger>> getPassengerFloorMap() {
-        return this.passengerFloorMap;
-    }
-
+    // methods
     public void loadFloorMapWithPassengers(){
         for (Request r : RequestManager.getInstance().getRequests()) {
             List<Passenger> waitingPassengers = passengerFloorMap.computeIfAbsent(
@@ -35,5 +33,10 @@ public class PassengerFloorMap {
                 waitingPassengers.add(passenger);
             }
         }
+    }
+
+    // getter
+    public Map<Integer, List<Passenger>> getPassengerFloorMap() {
+        return this.passengerFloorMap;
     }
 }

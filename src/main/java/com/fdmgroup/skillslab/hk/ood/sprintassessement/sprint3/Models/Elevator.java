@@ -17,7 +17,7 @@ public class Elevator {
         this.isGoingUp = true;
     }
 
-    // floor methods
+    // ======= FLOOR METHODS ======= //
     public void requestFloor(){
         if (this.numOfPassengers == 0) {
             RequestManager.getInstance().allocateRequest(this);
@@ -28,12 +28,11 @@ public class Elevator {
         destinationFloors.add(destinationFloor); // PQ will automatically sort new floors
     }
 
-    public void goToFloor(Request request) throws InterruptedException {
-            Thread.sleep(3000);
+    public void goToFloor(Request request) {
             this.setCurrentFloor(request.getCurrentFloor());
     }
 
-    // passenger loading methods
+    // ======= PASSENGER LOADING METHODS ======= //
     public void loadPassengers(Request r) throws InterruptedException {
         Thread.sleep(5000);
         // Add pax count
@@ -66,7 +65,7 @@ public class Elevator {
     }
 
 
-    // getters
+    // ======= GETTERS AND SETTERS ======= //
     public int getNumOfPassengers() {
         return numOfPassengers;
     }
