@@ -1,6 +1,5 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
 
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.RequestManager;
 
 import java.util.*;
@@ -41,7 +40,7 @@ public class Elevator {
         this.numOfPassengers += r.getNumOfPassengers();
 
         // Get pax off the floor list and onto the elevator list
-        List<Passenger> floorPassengers = PassengerFloorMap.getBuildingFloorMap().get(r.getCurrentFloor());
+        List<Passenger> floorPassengers = PassengerFloorMap.getInstance().getPassengerFloorMap().get(r.getCurrentFloor());
         Iterator<Passenger> iterator = floorPassengers.iterator();
         while (iterator.hasNext()) {
             Passenger passenger = iterator.next();

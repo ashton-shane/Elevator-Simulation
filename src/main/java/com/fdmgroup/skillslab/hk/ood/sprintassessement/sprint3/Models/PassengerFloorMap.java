@@ -1,26 +1,29 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
 
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.RequestManager;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PassengerFloorMap {
-    private static Map<Integer, List<Passenger>> buildingFloorMap;             // map format: { floor : List<Passenger> }
+    private Map<Integer, List<Passenger>> passengerFloorMap;             // map format: { floor : List<Passenger> }
     public static final PassengerFloorMap instance = new PassengerFloorMap();
 
-    public PassengerFloorMap(){
-        buildingFloorMap = new ConcurrentHashMap<>();
+    private PassengerFloorMap(){
+        this.passengerFloorMap = new ConcurrentHashMap<>();
     }
 
-    public static Map<Integer, List<Passenger>> getBuildingFloorMap() {
-        return buildingFloorMap;
+    public static PassengerFloorMap getInstance() {
+        return instance;
+    }
+
+    public Map<Integer, List<Passenger>> getPassengerFloorMap() {
+        return this.passengerFloorMap;
     }
 
     public void loadFloorMapWithPassengers(){
         for (Request r : RequestManager.getInstance().getRequests()) {
-            List<Passenger> waitingPassengers = buildingFloorMap.computeIfAbsent(
+            List<Passenger> waitingPassengers = passengerFloorMap.computeIfAbsent(
                     r.getCurrentFloor(), floor -> new ArrayList<>()
             );
             for (int i = 0; i < r.getNumOfPassengers(); i++) {
