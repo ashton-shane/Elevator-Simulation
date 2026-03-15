@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Elevator {
     private int currentFloor;
-    private Queue<Integer> destinationFloors = new ArrayDeque<>();
+    private Queue<Integer> destinationFloors = new PriorityQueue<>();
     private int numOfPassengers;
     private boolean isGoingUp;
     private List<Passenger> passengers = new ArrayList<>();
@@ -21,13 +21,12 @@ public class Elevator {
     // floor methods
     public void requestFloor(){
         if (this.numOfPassengers == 0) {
-            RequestManager.allocateRequest(this);
+            RequestManager.getInstance().allocateRequest(this);
         }
     }
 
     public void loadDestinationFloor(int destinationFloor) {
-        destinationFloors.add(destinationFloor);
-        // sort
+        destinationFloors.add(destinationFloor); // PQ will automatically sort new floors
     }
 
     public void goToFloor(Request request) throws InterruptedException {
@@ -73,7 +72,7 @@ public class Elevator {
         return numOfPassengers;
     }
 
-    public List<Integer> getDestinationFloors() {
+    public Queue<Integer> getDestinationFloors() {
         return destinationFloors;
     }
 

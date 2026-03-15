@@ -7,23 +7,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestManager {
-    private static List<Request> requests = new ArrayList<>();
+    private List<Request> requests = new ArrayList<>();
+    private static final RequestManager instance = new RequestManager();
+
+    // singleton
+    private RequestManager(){}
+
+    public static RequestManager getInstance() {
+        return instance;
+    }
 
     // methods
-    public static void allocateRequest(Elevator elevator) {
+    public void allocateRequest(Elevator elevator) {
         int elevatorCurrentFloor = elevator.getCurrentFloor();
-        for (Request request : requests) {
+        for (Request request : this.requests) {
             if (request.getCurrentFloor() == elevatorCurrentFloor) {
-                elevator.loadDestinationFloor(request.getDestinationFloor());
-                elevator.goToFloor(request);
-                this.removeRequest(request);
+                try {
+                    elevator.loadDestinationFloor(request.getDestinationFloor());
+                    elevator.goToFloor(request);
+                    this.removeRequest(request);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
             else {
                 int[] nearestFloor = {elevatorCurrentFloor,0}; // { closest floor, index of request }
                 if (request.isGoingUp() == elevator.isGoingUp()) {  // HANDLE NEGATIVES FOR REVERSE DIRECTION
                     if (request.getCurrentFloor() < nearestFloor[0]) {
                         nearestFloor[0] = request.getCurrentFloor();
-                        nearestFloor[1] = requests.indexOf(request);
+                        nearestFloor[1] = this.getRequests().indexOf(request);
                     }
                 }
             }
@@ -38,7 +50,7 @@ public class RequestManager {
     }
 
     // getters
-    public static List<Request> getRequests() {
-        return requests;
+    public List<Request> getRequests() {
+        return this.requests;
     }
 }

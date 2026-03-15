@@ -10,11 +10,16 @@ public class ElevatorService {
     private List<Elevator> elevators = new ArrayList<>();
 
     // lift movement
-    public void moveElevator(Elevator elevator, Request request) throws InterruptedException {
-        elevator.goToFloor(request);
+    public void moveElevator(Elevator elevator, Request request) {
+        try {
+            elevator.goToFloor(request);
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void checkOtherElevator(Request request){
+    public void checkOtherElevators(Request request){
         int destinationFloor = request.getDestinationFloor();
 
     }

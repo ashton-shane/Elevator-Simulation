@@ -8,25 +8,30 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LiftFloorMap {
-    private static Map<Integer, List<Elevator>> liftFloorMap;             // map format: { floor : List<Elevator> }
+    private static final LiftFloorMap instance = new LiftFloorMap();
+    private final Map<Integer, List<Elevator>> liftFloorMap;
 
-    // constructor
-    public LiftFloorMap(){
-        liftFloorMap = new ConcurrentHashMap<>();
+    // singleton
+    private LiftFloorMap() {
+        this.liftFloorMap = new ConcurrentHashMap<>();
+    }
+
+    public static LiftFloorMap getInstance() {
+        return instance;
     }
 
     // load lifts
     public void loadFloorMapWithLifts(){
         for (int i = 0; i < 3; i++) {
             Elevator elevator = new Elevator();
-            liftFloorMap
+            this.getLiftFloorMap()
                     .computeIfAbsent(elevator.getCurrentFloor(), floor -> new ArrayList<>())
                     .add(elevator);
         }
     }
 
     // getters
-    public static Map<Integer, List<Elevator>> getLiftFloorMap() {
-        return liftFloorMap;
+    public Map<Integer, List<Elevator>> getLiftFloorMap() {
+        return this.liftFloorMap;
     }
 }
