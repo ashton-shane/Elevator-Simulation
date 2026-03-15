@@ -10,7 +10,6 @@ public class Elevator {
     private int numOfPassengers;
     private boolean isGoingUp;
     private List<Passenger> passengers = new ArrayList<>();
-    private List<Request> currentRequests = new ArrayList<>();
 
     public Elevator() {
         this.numOfPassengers = 0;
@@ -20,7 +19,7 @@ public class Elevator {
     // ======= FLOOR METHODS ======= //
     public void requestFloor(){
         if (this.numOfPassengers == 0) {
-            RequestManager.getInstance().allocateRequest(this);
+            RequestManager.getInstance().requestSameFloorAlloc(this);
         }
     }
 

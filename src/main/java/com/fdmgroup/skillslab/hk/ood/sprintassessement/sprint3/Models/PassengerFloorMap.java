@@ -19,19 +19,17 @@ public class PassengerFloorMap {
     }
 
     // methods
-    public void loadFloorMapWithPassengers(){
-        for (Request r : RequestManager.getInstance().getRequestsPool()) {
-            List<Passenger> waitingPassengers = passengerFloorMap.computeIfAbsent(
-                    r.getCurrentFloor(), floor -> new ArrayList<>()
+    public void loadFloorMapWithPassengers(Request request){
+        List<Passenger> waitingPassengers = passengerFloorMap.computeIfAbsent(
+                request.getCurrentFloor(), floor -> new ArrayList<>()
+        );
+        for (int i = 0; i < request.getNumOfPassengers(); i++) {
+            Passenger passenger = new Passenger(
+                    request.getCurrentFloor(),
+                    request.getDestinationFloor(),
+                    request.isGoingUp()
             );
-            for (int i = 0; i < r.getNumOfPassengers(); i++) {
-                Passenger passenger = new Passenger(
-                        r.getCurrentFloor(),
-                        r.getDestinationFloor(),
-                        r.isGoingUp()
-                );
-                waitingPassengers.add(passenger);
-            }
+            waitingPassengers.add(passenger);
         }
     }
 
