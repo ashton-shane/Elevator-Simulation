@@ -1,6 +1,8 @@
-package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
+package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
 
-import javax.print.attribute.standard.Destination;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.RequestManager;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,10 +14,8 @@ public class Elevator {
     private boolean isGoingUp;
     private List<Passenger> passengers = new ArrayList<>();
     private List<Request> currentRequests = new ArrayList<>();
-    private ElevatorService elevatorService;
 
-    public Elevator(ElevatorService elevatorService) {
-        this.elevatorService = elevatorService;
+    public Elevator() {
         this.numOfPassengers = 0;
         this.isGoingUp = true;
     }
@@ -23,7 +23,7 @@ public class Elevator {
     // floor methods
     public void requestFloor(){
         if (this.numOfPassengers == 0) {
-            elevatorService.allocateRequest(this);
+            RequestManager.allocateRequest(this);
         }
     }
 
@@ -33,6 +33,7 @@ public class Elevator {
     }
 
     public void goToFloor(Request request){
+        Thread.sleep(3000);
         this.setCurrentFloor(request.getCurrentFloor());
     }
 
@@ -42,7 +43,7 @@ public class Elevator {
         this.numOfPassengers += r.getNumOfPassengers();
 
         // Get pax off the floor list and onto the elevator list
-        List<Passenger> floorPassengers = FloorMap.getBuildingFloorMap().get(r.getCurrentFloor());
+        List<Passenger> floorPassengers = PassengerFloorMap.getBuildingFloorMap().get(r.getCurrentFloor());
         Iterator<Passenger> iterator = floorPassengers.iterator();
         while (iterator.hasNext()) {
             Passenger passenger = iterator.next();

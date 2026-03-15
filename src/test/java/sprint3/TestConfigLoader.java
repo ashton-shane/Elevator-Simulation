@@ -2,7 +2,7 @@ package sprint3;
 
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.ConfigLoader;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Configuration;
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Request;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.Request;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

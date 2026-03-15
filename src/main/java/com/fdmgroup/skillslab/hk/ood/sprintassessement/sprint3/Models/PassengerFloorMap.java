@@ -1,18 +1,16 @@
-package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
+package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
+
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class FloorMap {
+public class PassengerFloorMap {
     private static Map<Integer, List<Passenger>> buildingFloorMap;             // map format: { floor : List<Passenger> }
-    public static final FloorMap instance = new FloorMap();
+    public static final PassengerFloorMap instance = new PassengerFloorMap();
 
-    private FloorMap(){
+    public PassengerFloorMap(){
         buildingFloorMap = new ConcurrentHashMap<>();
-    }
-
-    public static FloorMap getInstance(){
-        return instance;
     }
 
     public static Map<Integer, List<Passenger>> getBuildingFloorMap() {

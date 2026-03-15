@@ -1,15 +1,16 @@
-package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
+package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers;
 
-import java.sql.Array;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.Elevator;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.Request;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ElevatorService {
+public class RequestManager {
     private static List<Request> requests = new ArrayList<>();
-    private List<Elevator> elevators = new ArrayList<>();
 
     // methods
-    public void allocateRequest(Elevator elevator) {
+    public static void allocateRequest(Elevator elevator) {
         int elevatorCurrentFloor = elevator.getCurrentFloor();
         for (Request request : requests) {
             if (request.getCurrentFloor() == elevatorCurrentFloor) {
@@ -32,7 +33,6 @@ public class ElevatorService {
     public void removeRequest(Request request) {
         requests.remove(request);
     }
-
     public void addRequest(Request request) {
         requests.remove(request);
     }
@@ -40,9 +40,5 @@ public class ElevatorService {
     // getters
     public static List<Request> getRequests() {
         return requests;
-    }
-
-    public List<Elevator> getElevators() {
-        return elevators;
     }
 }

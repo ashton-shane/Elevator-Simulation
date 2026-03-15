@@ -1,4 +1,4 @@
-package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
+package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
 
 public class Request {
     private int currentFloor;
