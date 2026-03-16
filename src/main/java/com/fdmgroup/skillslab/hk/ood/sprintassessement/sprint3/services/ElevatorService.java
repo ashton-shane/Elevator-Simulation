@@ -12,9 +12,6 @@ public class ElevatorService {
     private Map<Integer, ArrayList<Request>> requestsThatAreGoingUpMap = new HashMap<>();
     private Map<Integer, ArrayList<Request>> requestsThatAreGoingDownMap = new HashMap<>();
     private Configuration config;
-    private Integer loadUnloadTime = 5;
-    private Integer perFloorTraversalTime = 3;
-    private Integer maxFloor = 10;
 
     // in the constructor, the requests are split into 2 maps, one for requests that
     // are going up and the other for down
@@ -50,7 +47,7 @@ public class ElevatorService {
                 // head to floor indicated by pending request
                 var pickUpFloor = pendingRequests.getFirst().currentFloor();
                 while (currentFloor != pickUpFloor) {
-                    Thread.sleep(config.simulationRate() * perFloorTraversalTime);
+                    Thread.sleep(config.simulationRate() * 3);
                     currentFloor += (pickUpFloor - currentFloor) / Math.abs(pickUpFloor - currentFloor);
                     System.out.println(Thread.currentThread().getName() + " is at floor " + currentFloor);
                 }
@@ -62,12 +59,12 @@ public class ElevatorService {
                     }
                 }
                 pendingRequests.removeAll(processingRequests);
-                Thread.sleep(config.simulationRate() * loadUnloadTime);
+                Thread.sleep(config.simulationRate() * 5);
                 // check processing requests, find the nearest floor to drop off passengers
                 while (processingRequests.size() != 0) {
                     var targetFloor = getTargetFloor(processingRequests, currentFloor);
                     while (currentFloor != targetFloor) {
-                        Thread.sleep(config.simulationRate() * perFloorTraversalTime);
+                        Thread.sleep(config.simulationRate() * 3);
                         currentFloor += (targetFloor - currentFloor) / Math.abs(targetFloor - currentFloor);
                         System.out.println(Thread.currentThread().getName() + " is at floor " + currentFloor);
                     }
@@ -77,7 +74,7 @@ public class ElevatorService {
                             requestsOnTargetFloor.add(req);
                         }
                     }
-                    Thread.sleep(config.simulationRate() * loadUnloadTime);
+                    Thread.sleep(config.simulationRate() * 5);
                     totalCompletedRequests += requestsOnTargetFloor.size();
                     System.out.println(Thread.currentThread().getName() + " has completed " + totalCompletedRequests
                             + " requests in total.");
@@ -114,7 +111,7 @@ public class ElevatorService {
     }
 
     private Integer getTargetFloor(List<Request> requests, Integer currentFloor) {
-        var smallestDiff = maxFloor;
+        var smallestDiff = 10;
         var targetFloor = currentFloor;
         for (var req : requests) {
             var diff = Math.abs(req.destinationFloor() - currentFloor);
