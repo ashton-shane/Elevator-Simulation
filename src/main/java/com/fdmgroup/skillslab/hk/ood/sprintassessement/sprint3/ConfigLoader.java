@@ -1,4 +1,4 @@
-package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.services;
+package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,9 +7,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.models.Configuration;
-import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.models.Request;
 
 
 public class ConfigLoader {
