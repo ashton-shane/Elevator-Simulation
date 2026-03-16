@@ -3,6 +3,7 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +25,9 @@ public class LiftFloorMap {
     public void loadFloorMapWithLifts(){
         for (Elevator elevator : ElevatorService.getInstance().getElevators()) {
             this.getLiftFloorMap()
-                    .computeIfAbsent(elevator.getCurrentFloor(), floor -> new ArrayList<>())
+                    .computeIfAbsent(
+                            elevator.getCurrentFloor(),
+                            floor -> Collections.synchronizedList(new ArrayList<>()))
                     .add(elevator);
         }
     }

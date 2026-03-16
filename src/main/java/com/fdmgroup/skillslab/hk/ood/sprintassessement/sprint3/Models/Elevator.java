@@ -34,8 +34,13 @@ public class Elevator {
         this.numOfPassengers += r.getNumOfPassengers();
 
         // Get pax off the floor list and onto the elevator list
-        List<Passenger> floorPassengers = PassengerFloorMap.getInstance().getPassengerFloorMap().get(r.getCurrentFloor());
+        PassengerFloorMap pfm = PassengerFloorMap.getInstance();
+        List<Passenger> floorPassengers = pfm.getPassengerFloorMap().get(r.getCurrentFloor());
         Iterator<Passenger> iterator = floorPassengers.iterator();
+        if (floorPassengers == null) {
+            pfm.loadFloorMapWithPassengers(r);
+            floorPassengers = pfm.getPassengerFloorMap().get(r.getCurrentFloor());
+        }
         while (iterator.hasNext()) {
             Passenger passenger = iterator.next();
             if (passenger.isGoingUp() == this.isGoingUp()) {

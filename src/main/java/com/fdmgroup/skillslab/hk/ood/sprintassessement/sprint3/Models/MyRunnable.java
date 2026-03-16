@@ -18,9 +18,29 @@ public class MyRunnable implements Runnable {
     public void run(){
         long endTime = System.currentTimeMillis() + (Configuration.getSimulationPeriod());
         while (System.currentTimeMillis() < endTime) {
-            elevator.requestFloor();
-            elevatorService.moveElevator();
-            requestManager.requestSameFloorAlloc(elevator);
+            // If elevator is empty, allocate nearest floor request
+            elevator.requestFloor(); // internally calls emptyLiftFloorAlloc
+
+            // As long as we have destinations, keep servicing them
+            while (!elevator.getDestinationFloors().isEmpty()) {
+                try {
+                    // Get the Request that matches current floor and next dest
+                    Request request = requestManager.getNextRequestForElevator(elevator);
+                    if (request == null) break; // nothing to service for this dest
+
+                    // Loading and unloading of pax
+                    elevator.loadPassengers(request);
+                    elevatorService.moveElevator(elevator, request);
+                    requestManager.removeFromRequestsPendingAssignment(request);
+                    elevator.unloadPassengers(request);
+
+                    // At the destination floor, allocate same‑direction requests
+                    requestManager.requestSameFloorAlloc(elevator);
+                }
+                catch (InterruptedException e){
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 }

@@ -19,11 +19,8 @@ public class ElevatorService {
         return instance;
     }
     // ======= LIFT MOVEMENT METHODS ======= //
-    public void moveElevator(Elevator elevator, Request request) {
+    public synchronized void moveElevator(Elevator elevator, Request request) {
         try {
-            // load passengers
-            elevator.loadPassengers(request);
-
             // simulate movement
             Thread.sleep(3000);
 
@@ -32,11 +29,8 @@ public class ElevatorService {
             liftFloorMap.getLiftFloorMap().get(request.getDestinationFloor()).add(elevator);
             elevator.setCurrentFloor(request.getCurrentFloor());
 
-            // unload pax
-            elevator.unloadPassengers(request);
-
-            //
-            elevator.getDestinationFloors().remove();   // leftpops the dest floor from the queue
+            // remove the dest floor from the queue
+            elevator.getDestinationFloors().remove();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

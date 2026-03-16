@@ -9,7 +9,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-
     static void main(String[] args) {
         var loader = new ConfigLoader();
         loader.loadConfigFile("ElevatorConfig.txt");

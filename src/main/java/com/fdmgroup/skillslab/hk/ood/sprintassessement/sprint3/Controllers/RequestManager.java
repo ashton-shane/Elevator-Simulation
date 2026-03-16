@@ -25,7 +25,7 @@ public class RequestManager {
     }
 
     // ======= REQUEST ALLOCATION METHODS ======= //
-    public void requestSameFloorAlloc(Elevator elevator) {
+    public synchronized void requestSameFloorAlloc(Elevator elevator) {
         int elevatorCurrentFloor = elevator.getCurrentFloor();
 
         for (Request request : this.getReqPendingAssignment()) {
@@ -38,7 +38,7 @@ public class RequestManager {
         }
     }
 
-    public void emptyLiftFloorAlloc(Elevator elevator) {
+    public synchronized void emptyLiftFloorAlloc(Elevator elevator) {
         int elevatorCurrentFloor = elevator.getCurrentFloor();
 
         // Find the minimum floor difference
@@ -82,10 +82,24 @@ public class RequestManager {
         elevator.setCurrentFloor(nearestFloor);
     }
 
-    public void moveToPendingRequests() {
+    public synchronized void moveToPendingRequests() {
         Request requestToMove = requestsPool.peek();
         getReqPendingAssignment().add(requestToMove);
         removeFromRequestPool(requestToMove);
+    }
+
+    public synchronized Request getNextRequestForElevator(Elevator elevator) {
+        int currentFloor = elevator.getCurrentFloor();
+        if (elevator.getDestinationFloors().isEmpty()) return null;
+        int nextDest = elevator.getDestinationFloors().peek();
+
+        for (Request r : reqPendingAssignment) {
+            if (r.getCurrentFloor() == currentFloor &&
+                    r.getDestinationFloor() == nextDest) {
+                return r;
+            }
+        }
+        return null;
     }
 
     // ======= GETTERS AND SETTERS ======= //
@@ -93,7 +107,7 @@ public class RequestManager {
         return this.requestsPool;
     }
 
-    public void removeFromRequestPool(Request request) {
+    public synchronized void removeFromRequestPool(Request request) {
         this.requestsPool.remove(request);
     }
 
@@ -101,7 +115,7 @@ public class RequestManager {
         return this.reqPendingAssignment;
     }
 
-    public void removeFromRequestsPendingAssignment(Request request){
+    public synchronized void removeFromRequestsPendingAssignment(Request request){
         this.reqPendingAssignment.remove(request);
     }
 

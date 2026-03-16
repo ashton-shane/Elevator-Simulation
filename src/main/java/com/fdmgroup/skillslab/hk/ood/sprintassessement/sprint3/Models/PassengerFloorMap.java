@@ -21,7 +21,8 @@ public class PassengerFloorMap {
     // methods
     public void loadFloorMapWithPassengers(Request request){
         List<Passenger> waitingPassengers = passengerFloorMap.computeIfAbsent(
-                request.getCurrentFloor(), floor -> new ArrayList<>()
+                request.getCurrentFloor(),
+                floor -> Collections.synchronizedList(new ArrayList<>())
         );
         for (int i = 0; i < request.getNumOfPassengers(); i++) {
             Passenger passenger = new Passenger(
