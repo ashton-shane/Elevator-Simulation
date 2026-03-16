@@ -5,6 +5,7 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.LiftFloorM
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.Request;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ElevatorService {
@@ -24,13 +25,20 @@ public class ElevatorService {
             // simulate movement
             Thread.sleep(3000);
 
-            // move lift on the liftmap
+            // remove lift from current floor
             liftFloorMap.getLiftFloorMap().get(request.getCurrentFloor()).remove(elevator);
-            liftFloorMap.getLiftFloorMap().get(request.getDestinationFloor()).add(elevator);
-            elevator.setCurrentFloor(request.getCurrentFloor());
+
+            // ensure list exists for destination floor, then add elevator
+            List<Elevator> newLiftFloor = liftFloorMap.getLiftFloorMap().computeIfAbsent(
+                    request.getDestinationFloor(),
+                    floor -> Collections.synchronizedList(new ArrayList<>())
+            );
+            newLiftFloor.add(elevator);
+            elevator.setCurrentFloor(request.getDestinationFloor());
 
             // remove the dest floor from the queue
             elevator.getDestinationFloors().remove();
+
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

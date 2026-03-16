@@ -39,10 +39,14 @@ public class RequestManager {
     }
 
     public synchronized void emptyLiftFloorAlloc(Elevator elevator) {
+        if (reqPendingAssignment.isEmpty()) {
+            return;
+        }
+
         int elevatorCurrentFloor = elevator.getCurrentFloor();
 
         // Find the minimum floor difference
-        int nearestFloor = this.getReqPendingAssignment().getFirst().getCurrentFloor();
+        int nearestFloor = this.getReqPendingAssignment().get(0).getCurrentFloor();
         int minFloorDiff = elevatorCurrentFloor - nearestFloor;
         boolean isGoingUp = ((elevatorCurrentFloor - nearestFloor) > 0);
 
@@ -69,6 +73,7 @@ public class RequestManager {
             boolean reqDirection = ((elevatorCurrentFloor - nearestFloor) > 0);
             if (r.getCurrentFloor() == nearestFloor && reqDirection == isGoingUp) {
                 destinationFloors.add(r.getDestinationFloor());
+                PassengerFloorMap.getInstance().loadFloorMapWithPassengers(r);
             }
         }
 
@@ -84,6 +89,9 @@ public class RequestManager {
 
     public synchronized void moveToPendingRequests() {
         Request requestToMove = requestsPool.peek();
+        if (requestToMove == null) {
+            return;
+        }
         getReqPendingAssignment().add(requestToMove);
         removeFromRequestPool(requestToMove);
     }
