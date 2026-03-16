@@ -19,7 +19,7 @@ public class Elevator {
     // ======= FLOOR METHODS ======= //
     public void requestFloor(){
         if (this.numOfPassengers == 0) {
-            RequestManager.getInstance().requestSameFloorAlloc(this);
+            RequestManager.getInstance().emptyLiftFloorAlloc(this);
         }
     }
 

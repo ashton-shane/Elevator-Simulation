@@ -17,7 +17,7 @@ public class ThreadManager extends Thread {
             elevatorService.getElevators().add(elevator);
 
             // threads
-            MyRunnable myRunnable = new MyRunnable();
+            MyRunnable myRunnable = new MyRunnable(elevator, elevatorService);
             Thread thread = new Thread(myRunnable);
             threadList.add(thread);
         }
