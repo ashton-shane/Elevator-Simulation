@@ -20,7 +20,7 @@ public class Main {
         // Requests are released every 5 seconds
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> {
-            RequestManager.getInstance().poolToActiveRequests();
+            RequestManager.getInstance().moveToPendingRequests();
         }, 0, 5, TimeUnit.SECONDS);
     }
 }

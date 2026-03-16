@@ -17,7 +17,7 @@ public class ElevatorService {
             Thread.sleep(3000);
             liftFloorMap.getLiftFloorMap().get(request.getCurrentFloor()).remove(elevator);
             liftFloorMap.getLiftFloorMap().get(request.getDestinationFloor()).add(elevator);
-            elevator.setCurrentFloor(request);
+            elevator.setCurrentFloor(request.getCurrentFloor());
             elevator.getDestinationFloors().remove();   // leftpops the dest floor from the queue
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

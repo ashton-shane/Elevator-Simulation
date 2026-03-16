@@ -9,27 +9,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+
 public class RequestManager {
     private Queue<Request> requestsPool = new ArrayDeque<>();
-    private List<Request> requestsPendingAssignment = new ArrayList<>();
+    private List<Request> reqPendingAssignment = new ArrayList<>();
     private static final RequestManager instance = new RequestManager();
 
-    // singleton
+    // ======= SINGLETON ======= //
     private RequestManager(){}
 
     public static RequestManager getInstance() {
         return instance;
     }
 
-    // methods
+    // ======= REQUEST ALLOCATION METHODS ======= //
     public void requestSameFloorAlloc(Elevator elevator) {
         int elevatorCurrentFloor = elevator.getCurrentFloor();
 
-        // allocating requests on the same floor
-        for (Request request : this.getRequestsPendingAssignment()) {
+        for (Request request : this.getReqPendingAssignment()) {
             if (request.getCurrentFloor() == elevatorCurrentFloor) {
                 elevator.loadDestinationFloor(request.getDestinationFloor());
-                elevator.setCurrentFloor(request);
+                elevator.setCurrentFloor(request.getCurrentFloor());
                 this.removeFromRequestsPendingAssignment(request);
                 PassengerFloorMap.getInstance().loadFloorMapWithPassengers(request);
             }
@@ -38,36 +40,55 @@ public class RequestManager {
 
     public void emptyLiftFloorAlloc(Elevator elevator) {
         int elevatorCurrentFloor = elevator.getCurrentFloor();
-        Request nearestFloorRequest = this.getRequestsPendingAssignment().getFirst();
-        int floorDiff = nearestFloorRequest.getCurrentFloor();
-        ArrayList<Integer> destinationFloors = new ArrayList<>();
 
-        // find nearest floor (TODO: need to fix this logic)
-        for (Request r : this.getRequestsPendingAssignment()) {
-            int currDiff = Math.abs(r.getCurrentFloor() - elevatorCurrentFloor);
-            if (currDiff < floorDiff) {
-                floorDiff = currDiff;
-                nearestFloorRequest = r;
+        // Find the minimum floor difference
+        int nearestFloor = this.getReqPendingAssignment().getFirst().getCurrentFloor();
+        int minFloorDiff = elevatorCurrentFloor - nearestFloor;
+        boolean isGoingUp = ((elevatorCurrentFloor - nearestFloor) > 0);
+
+        for (Request r : this.getReqPendingAssignment()) {
+            boolean reqDirection = ((elevatorCurrentFloor - nearestFloor) > 0);
+            int currFloorDiff = elevatorCurrentFloor - r.getCurrentFloor();
+
+            // reassign if we find a nearer floor
+            if (abs(currFloorDiff) < abs(minFloorDiff)) {
+                nearestFloor = r.getCurrentFloor();
+                minFloorDiff = currFloorDiff;
+            }
+
+            // For subsequent req w/ same floor difference, prefer floors going up
+            if (abs(currFloorDiff) == minFloorDiff && isGoingUp == true) {
+                nearestFloor = r.getCurrentFloor();
+            }
+
+        }
+
+        // Collect all requests on that exact nearest floor going in the same direction
+        ArrayList<Integer> destinationFloors = new ArrayList<>();
+        for (Request r : this.getReqPendingAssignment()) {
+            boolean reqDirection = ((elevatorCurrentFloor - nearestFloor) > 0);
+            if (r.getCurrentFloor() == nearestFloor && reqDirection == isGoingUp) {
                 destinationFloors.add(r.getDestinationFloor());
             }
         }
 
-        // load destination floors
+        // Set direction
+        elevator.setGoingUp(isGoingUp == true);
+
+        // Load all destination floors and move elevator
         for (int floor : destinationFloors) {
             elevator.loadDestinationFloor(floor);
         }
-
-        // move elevator to the floor
-        elevator.setCurrentFloor(nearestFloorRequest);
+        elevator.setCurrentFloor(nearestFloor);
     }
 
-    public void poolToActiveRequests() {
+    public void moveToPendingRequests() {
         Request requestToMove = requestsPool.peek();
-        getRequestsPendingAssignment().add(requestToMove);
+        getReqPendingAssignment().add(requestToMove);
         removeFromRequestPool(requestToMove);
     }
 
-    // getters and setters
+    // ======= GETTERS AND SETTERS ======= //
     public Queue<Request> getRequestsPool() {
         return this.requestsPool;
     }
@@ -76,12 +97,12 @@ public class RequestManager {
         this.requestsPool.remove(request);
     }
 
-    public List<Request> getRequestsPendingAssignment() {
-        return this.requestsPendingAssignment;
+    public List<Request> getReqPendingAssignment() {
+        return this.reqPendingAssignment;
     }
 
     public void removeFromRequestsPendingAssignment(Request request){
-        this.requestsPendingAssignment.remove(request);
+        this.reqPendingAssignment.remove(request);
     }
 
 }

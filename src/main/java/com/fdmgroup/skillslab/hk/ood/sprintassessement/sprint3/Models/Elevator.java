@@ -54,9 +54,6 @@ public class Elevator {
         this.getPassengers().removeIf(passenger ->
                 passenger.getDestinationFloor() == this.getCurrentFloor()
         );
-
-        // remove from elevator requests
-        this.getCurrentRequests().remove(request);
     }
 
 
@@ -73,20 +70,19 @@ public class Elevator {
         return currentFloor;
     }
 
-    public void setCurrentFloor(Request request) {
-        this.currentFloor = request.getDestinationFloor();
+    public void setCurrentFloor(int floor) {
+        this.currentFloor = floor;
     }
 
     public boolean isGoingUp() {
         return isGoingUp;
     }
 
+    public void setGoingUp(boolean goingUp) {
+        this.isGoingUp = goingUp;
+    }
+
     public List<Passenger> getPassengers() {
         return passengers;
     }
-
-    public List<Request> getCurrentRequests() {
-        return currentRequests;
-    }
-
 }
