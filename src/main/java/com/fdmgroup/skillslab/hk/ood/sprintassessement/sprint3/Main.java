@@ -18,9 +18,6 @@ public class Main {
         // loader.getConfig(); -> returns Configuration object
         // loader.getRequests(); -> returns List<Request>
 
-        // load FloorMap and PaxMap
-        LiftFloorMap.getInstance().loadFloorMapWithLifts();
-
         // Requests are released every 5 seconds
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> {
@@ -30,6 +27,10 @@ public class Main {
         // Create and Start Threads
         ThreadManager threadManager = new ThreadManager();
         threadManager.createThreads(3);
+
+        // load FloorMap after elevators are created
+        LiftFloorMap.getInstance().loadFloorMapWithLifts();
+
         threadManager.startThreads();
     }
 }

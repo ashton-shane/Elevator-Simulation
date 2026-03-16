@@ -7,6 +7,7 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.Request;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class ElevatorService {
     private static ElevatorService instance = new ElevatorService();
@@ -25,11 +26,18 @@ public class ElevatorService {
             // simulate movement
             Thread.sleep(3000);
 
-            // remove lift from current floor
-            liftFloorMap.getLiftFloorMap().get(request.getCurrentFloor()).remove(elevator);
+            Map<Integer, List<Elevator>> map = liftFloorMap.getLiftFloorMap();
+
+            // remove lift from current floor (ensure list exists so we don't NPE)
+            int fromFloor = elevator.getCurrentFloor();
+            List<Elevator> currentLiftFloor = map.computeIfAbsent(
+                    fromFloor,
+                    floor -> Collections.synchronizedList(new ArrayList<>())
+            );
+            currentLiftFloor.remove(elevator);
 
             // ensure list exists for destination floor, then add elevator
-            List<Elevator> newLiftFloor = liftFloorMap.getLiftFloorMap().computeIfAbsent(
+            List<Elevator> newLiftFloor = map.computeIfAbsent(
                     request.getDestinationFloor(),
                     floor -> Collections.synchronizedList(new ArrayList<>())
             );
