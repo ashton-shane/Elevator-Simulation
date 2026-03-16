@@ -57,7 +57,7 @@ public class RequestManager {
             }
 
             // For subsequent req w/ same floor difference, prefer floors going up
-            if (abs(currFloorDiff) == minFloorDiff && isGoingUp == true) {
+            if (abs(currFloorDiff) == minFloorDiff && isGoingUp) {
                 nearestFloor = r.getCurrentFloor();
             }
 
@@ -73,7 +73,7 @@ public class RequestManager {
         }
 
         // Set direction
-        elevator.setGoingUp(isGoingUp == true);
+        elevator.setGoingUp(isGoingUp);
 
         // Load all destination floors and move elevator
         for (int floor : destinationFloors) {
