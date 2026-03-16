@@ -22,7 +22,7 @@ public class LiftFloorMap {
 
     // load lifts
     public void loadFloorMapWithLifts(){
-        for (int i = 0; i < 3; i++) {
+        for (Elevator elevator : ElevatorService.getInstance().getElevators()) {
             Elevator elevator = new Elevator();
             this.getLiftFloorMap()
                     .computeIfAbsent(elevator.getCurrentFloor(), floor -> new ArrayList<>())

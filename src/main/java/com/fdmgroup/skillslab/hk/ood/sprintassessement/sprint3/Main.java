@@ -2,6 +2,7 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
 
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.RequestManager;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.ThreadManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -10,9 +11,8 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     static void main(String[] args) {
-        ElevatorService elevatorService = new ElevatorService();
         var loader = new ConfigLoader();
-        loader.loadConfigFile("ElevatorConfig.txt", elevatorService);
+        loader.loadConfigFile("ElevatorConfig.txt");
         // loader usage:
         // loader.getConfig(); -> returns Configuration object
         // loader.getRequests(); -> returns List<Request>
@@ -22,5 +22,10 @@ public class Main {
         scheduler.scheduleAtFixedRate(() -> {
             RequestManager.getInstance().moveToPendingRequests();
         }, 0, 5, TimeUnit.SECONDS);
+
+        // Create and Start Threads
+        ThreadManager threadManager = new ThreadManager();
+        threadManager.createThreads(3);
+        threadManager.startThreads();
     }
 }

@@ -3,6 +3,7 @@ package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.RequestManager;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.Request;
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Configuration;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class ConfigLoader {
     private Configuration config;
 
-    public void loadConfigFile(String filePath, ElevatorService elevatorService) {
+    public void loadConfigFile(String filePath) {
         // clear any previous configuration so loader can be reused
         this.config = null;
         RequestManager.getInstance().getRequestsPool().clear();

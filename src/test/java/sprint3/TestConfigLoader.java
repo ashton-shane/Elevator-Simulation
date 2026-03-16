@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestConfigLoader {
     private ConfigLoader loader;
     private RequestManager requestManager;
-    private ElevatorService elevatorService;
 
     @BeforeEach
     void setUp() {
@@ -25,7 +24,6 @@ public class TestConfigLoader {
         requestManager = RequestManager.getInstance();
         requestManager.getRequestsPool().clear();
         loader = new ConfigLoader();
-        elevatorService = new ElevatorService();
     }
 
     @Test
@@ -36,7 +34,7 @@ public class TestConfigLoader {
 
     @Test
     void loadValidResource_populatesConfigAndRequests() {
-        loader.loadConfigFile("testConfig.txt", elevatorService);
+        loader.loadConfigFile("testConfig.txt");
 
         Optional<Configuration> maybe = loader.getConfig();
         assertTrue(maybe.isPresent());
@@ -71,7 +69,7 @@ public class TestConfigLoader {
     @Test
     void loadNonexistent_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
-                () -> loader.loadConfigFile("does-not-exist.txt", elevatorService));
+                () -> loader.loadConfigFile("does-not-exist.txt"));
 
         assertTrue(loader.getConfig().isEmpty(), "configuration should still be empty after failure");
         assertTrue(requestManager.getRequestsPool().isEmpty(), "requests should still be empty after failure");
@@ -79,15 +77,15 @@ public class TestConfigLoader {
 
     @Test
     void repeatedLoads_replacePreviousData() {
-        loader.loadConfigFile("testConfig.txt", elevatorService);
+        loader.loadConfigFile("testConfig.txt");
         int firstSize = requestManager.getRequestsPool().size();
-        loader.loadConfigFile("testConfig.txt", elevatorService);
+        loader.loadConfigFile("testConfig.txt");
         assertEquals(firstSize, requestManager.getRequestsPool().size(), "loader should clear previous requests when reloading");
     }
 
     @Test
     void blankLinesAreIgnored_whenReadingRealFile() {
-        loader.loadConfigFile("sprint3.assessment.ElevatorConfig.txt", elevatorService);
+        loader.loadConfigFile("sprint3.assessment.ElevatorConfig.txt");
         assertTrue(loader.getConfig().isPresent());
         Configuration cfg = loader.getConfig().get();
         assertEquals(1000, cfg.simulationPeriod());

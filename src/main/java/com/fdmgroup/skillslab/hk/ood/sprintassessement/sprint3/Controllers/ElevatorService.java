@@ -8,9 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ElevatorService {
+    private static ElevatorService instance = new ElevatorService();
     private List<Elevator> elevators = new ArrayList<>();
     LiftFloorMap liftFloorMap = LiftFloorMap.getInstance();
 
+    // ======= SINGLETON ======= //
+    private ElevatorService() {}
+
+    public static ElevatorService getInstance() {
+        return instance;
+    }
     // ======= LIFT MOVEMENT METHODS ======= //
     public void moveElevator(Elevator elevator, Request request) {
         try {
