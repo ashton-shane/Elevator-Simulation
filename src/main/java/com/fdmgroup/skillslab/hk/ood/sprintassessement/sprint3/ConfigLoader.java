@@ -13,11 +13,8 @@ import java.util.Optional;
 
 
 public class ConfigLoader {
-    private Configuration config;
-
     public void loadConfigFile(String filePath) {
         // clear any previous configuration so loader can be reused
-        this.config = null;
         RequestManager.getInstance().getRequestsPool().clear();
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
@@ -36,10 +33,9 @@ public class ConfigLoader {
                 throw new IllegalArgumentException("configuration file must contain at least two numbers");
             }
 
-            // create record
-            this.config = new Configuration(
-                    Integer.parseInt(lines.get(0)),
-                    Integer.parseInt(lines.get(1)));
+            // Set simulation attributes
+            Configuration.setSimulationPeriod(Integer.parseInt(lines.get(0)));
+            Configuration.setSimulationRate(Integer.parseInt(lines.get(1)));
 
             for (int i = 2; i < lines.size(); i++) {
                 var fields = lines.get(i).split("\\s+");
@@ -59,10 +55,10 @@ public class ConfigLoader {
         }
     }
 
-    public Optional<Configuration> getConfig() {
-        if (this.config == null) {
-            return Optional.empty();
-        }
-        return Optional.of(this.config);
-    }
+//    public Optional<Configuration> getConfig() {
+//        if (this.config == null) {
+//            return Optional.empty();
+//        }
+//        return Optional.of(this.config);
+//    }
 }

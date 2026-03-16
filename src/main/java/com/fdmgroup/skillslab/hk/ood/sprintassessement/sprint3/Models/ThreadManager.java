@@ -1,5 +1,6 @@
 package com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models;
 
+import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Configuration;
 import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.ElevatorService;
 
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ public class ThreadManager extends Thread {
             elevatorService.getElevators().add(elevator);
 
             // threads
-            Thread thread = new Thread();
+            MyRunnable myRunnable = new MyRunnable();
+            Thread thread = new Thread(myRunnable);
             threadList.add(thread);
         }
     }
