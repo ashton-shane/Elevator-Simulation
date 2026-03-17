@@ -62,11 +62,4 @@ public class ConfigLoader {
             System.out.println(e.getMessage());
         }
     }
-
-//    public Optional<Configuration> getConfig() {
-//        if (this.config == null) {
-//            return Optional.empty();
-//        }
-//        return Optional.of(this.config);
-//    }
 }

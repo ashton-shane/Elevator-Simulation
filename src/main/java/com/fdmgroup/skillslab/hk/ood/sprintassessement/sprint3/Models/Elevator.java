@@ -32,7 +32,7 @@ public class Elevator {
     }
 
     // ======= PASSENGER LOADING METHODS ======= //
-    public void loadPassengers(Request r) throws InterruptedException {
+    public synchronized void loadPassengers(Request r) throws InterruptedException {
         logger.debug("{} loading {} passengers", Thread.currentThread().getName(), r.getNumOfPassengers());
         Thread.sleep(5000);
         // Add pax count
