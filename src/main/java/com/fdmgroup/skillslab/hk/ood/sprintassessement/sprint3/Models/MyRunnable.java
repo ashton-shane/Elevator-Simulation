@@ -44,7 +44,6 @@ public class MyRunnable implements Runnable {
                         request.getNumOfPassengers());
                     elevator.loadPassengers(request);
                     elevatorService.moveElevator(elevator, request);
-                    requestManager.removeFromRequestsPendingAssignment(request);
                     elevator.unloadPassengers(request);
 
                     // At the destination floor, allocate same‑direction requests

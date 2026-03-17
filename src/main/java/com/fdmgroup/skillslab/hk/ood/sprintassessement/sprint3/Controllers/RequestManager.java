@@ -6,6 +6,7 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Models.Request;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
@@ -32,11 +33,13 @@ public class RequestManager {
     public synchronized void requestSameFloorAlloc(Elevator elevator) {
         int elevatorCurrentFloor = elevator.getCurrentFloor();
 
-        for (Request request : this.getReqPendingAssignment()) {
+        Iterator<Request> it = this.getReqPendingAssignment().iterator();
+        while (it.hasNext()) {
+            Request request = it.next();
             if (request.getCurrentFloor() == elevatorCurrentFloor) {
                 elevator.loadDestinationFloor(request.getDestinationFloor());
                 elevator.setCurrentFloor(request.getCurrentFloor());
-                this.removeFromRequestsPendingAssignment(request);
+                it.remove();
                 PassengerFloorMap.getInstance().loadFloorMapWithPassengers(request);
             }
         }
@@ -107,9 +110,13 @@ public class RequestManager {
         if (elevator.getDestinationFloors().isEmpty()) return null;
         int nextDest = elevator.getDestinationFloors().peek();
 
-        for (Request r : reqPendingAssignment) {
+        Iterator<Request> it = reqPendingAssignment.iterator();
+        while (it.hasNext()) {
+            Request r = it.next();
             if (r.getCurrentFloor() == currentFloor &&
                     r.getDestinationFloor() == nextDest) {
+                // Atomically "claim" this request so no other thread can process it.
+                it.remove();
                 return r;
             }
         }
