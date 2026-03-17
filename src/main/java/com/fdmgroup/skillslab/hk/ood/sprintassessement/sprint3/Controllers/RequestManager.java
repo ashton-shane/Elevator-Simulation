@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
@@ -16,6 +19,7 @@ public class RequestManager {
     private Queue<Request> requestsPool = new ArrayDeque<>();
     private List<Request> reqPendingAssignment = new ArrayList<>();
     private static final RequestManager instance = new RequestManager();
+    public static final Logger logger = LogManager.getLogger();
 
     // ======= SINGLETON ======= //
     private RequestManager(){}
@@ -94,6 +98,8 @@ public class RequestManager {
         }
         getReqPendingAssignment().add(requestToMove);
         removeFromRequestPool(requestToMove);
+        logger.debug("Moved the following request to pending: current floor-{} destination floor-{} number of passengers-{}", 
+            requestToMove.getCurrentFloor(), requestToMove.getDestinationFloor(), requestToMove.getNumOfPassengers());
     }
 
     public synchronized Request getNextRequestForElevator(Elevator elevator) {

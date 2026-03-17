@@ -14,9 +14,6 @@ public class Main {
     static void main(String[] args) {
         var loader = new ConfigLoader();
         loader.loadConfigFile("ElevatorConfig.txt");
-        // loader usage:
-        // loader.getConfig(); -> returns Configuration object
-        // loader.getRequests(); -> returns List<Request>
 
         // Requests are released every 5 seconds
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

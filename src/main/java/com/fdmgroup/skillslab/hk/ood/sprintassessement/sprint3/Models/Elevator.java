@@ -4,12 +4,16 @@ import com.fdmgroup.skillslab.hk.ood.sprintassessement.sprint3.Controllers.Reque
 
 import java.util.*;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Elevator {
     private int currentFloor;
     private Queue<Integer> destinationFloors = new PriorityQueue<>();
     private int numOfPassengers;
     private boolean isGoingUp;
     private List<Passenger> passengers = new ArrayList<>();
+    private static final Logger logger = LogManager.getLogger();
 
     public Elevator() {
         this.numOfPassengers = 0;
@@ -29,6 +33,7 @@ public class Elevator {
 
     // ======= PASSENGER LOADING METHODS ======= //
     public void loadPassengers(Request r) throws InterruptedException {
+        logger.debug("{} loading {} passengers", Thread.currentThread().getName(), r.getNumOfPassengers());
         Thread.sleep(5000);
         // Add pax count
         this.numOfPassengers += r.getNumOfPassengers();
@@ -54,6 +59,7 @@ public class Elevator {
     }
 
     public void unloadPassengers(Request request) throws InterruptedException {
+        logger.debug("{} unloading {} passengers", Thread.currentThread().getName(), request.getNumOfPassengers());
         Thread.sleep(5000);
         // subtract pax count
         this.numOfPassengers -= request.getNumOfPassengers();

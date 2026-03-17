@@ -11,8 +11,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class ConfigLoader {
+    private static final Logger logger = LogManager.getLogger();
     public void loadConfigFile(String filePath) {
         // clear any previous configuration so loader can be reused
         RequestManager.getInstance().getRequestsPool().clear();
@@ -36,6 +40,8 @@ public class ConfigLoader {
             // Set simulation attributes
             Configuration.setSimulationPeriod(Integer.parseInt(lines.get(0)));
             Configuration.setSimulationRate(Integer.parseInt(lines.get(1)));
+            logger.debug("Configuration simulation period has been set to: {}", Configuration.getSimulationPeriod());
+            logger.debug("Configuration simulation rate has been set to: {}", Configuration.getSimulationRate());
 
             for (int i = 2; i < lines.size(); i++) {
                 var fields = lines.get(i).split("\\s+");
@@ -50,6 +56,8 @@ public class ConfigLoader {
                     )
                 );
             }
+            logger.debug("A total of {} requests has been added to Request Manager", 
+                RequestManager.getInstance().getRequestsPool().size());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
